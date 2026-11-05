@@ -1,0 +1,42 @@
+/*
+ * Tech Elite | CS cards layout fix
+ * Scope is ONLY the skills grid tagged with te-cs-skills-grid in CsOverview.tsx.
+ * Do not add this class to a page wrapper, section, or the whole site.
+ */
+.te-cs-skills-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 20px !important;
+  align-items: start !important;
+  align-content: start !important;
+  grid-auto-flow: row !important;
+}
+
+/* Each card keeps only its OWN content height, even when its neighbor expands. */
+.te-cs-skills-grid > * {
+  box-sizing: border-box;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: fit-content !important;
+  max-height: none !important;
+  align-self: start !important;
+}
+
+/* Descriptions opened using \"شرح أكثر\" remain readable and contained. */
+.te-cs-skills-grid > * p,
+.te-cs-skills-grid > * button {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1050px) {
+  .te-cs-skills-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .te-cs-skills-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+  }
+}

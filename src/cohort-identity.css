@@ -1,0 +1,31 @@
+/* Tech Elite | إضافة هوية الدفعة السابعة وحساب إنستقرام. دون تعديل تنسيقات بقية الصفحات. */
+.cohort-identity-section{padding-block:45px 8px}
+.cohort-identity-card{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.7fr) minmax(220px,.65fr);gap:30px;align-items:center;padding:38px 48px;border-radius:26px;border:1px solid rgba(223,118,251,.33);background:radial-gradient(circle at 80% 30%,rgba(193,61,231,.23),transparent 53%),linear-gradient(125deg,#281036,#140c24);box-shadow:0 20px 55px rgba(27,7,47,.18)}
+.cohort-identity-card:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.25;background-image:linear-gradient(rgba(224,136,247,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(224,136,247,.12) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(to left,#000,transparent)}
+.cohort-identity-label{display:inline-flex;align-items:center;gap:8px;color:#eca6ff;font-size:12px;font-weight:800}
+.cohort-identity-copy h2{font-size:clamp(28px,3.3vw,45px);line-height:1.5;margin:10px 0 12px;color:#fff}
+.cohort-identity-copy h2 span{background:linear-gradient(105deg,#fc83dc,#b568ff);background-clip:text;-webkit-background-clip:text;color:transparent}
+.cohort-identity-copy p{font-size:14px;line-height:2.15;color:#c8b5db;max-width:720px;margin:0 0 21px}
+.cohort-identity-tags{display:flex;flex-wrap:wrap;gap:10px}
+.cohort-identity-tags>span{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;color:#ead9f5;border:1px solid rgba(218,138,247,.2);background:rgba(216,104,244,.1);padding:8px 12px;border-radius:999px}
+.cohort-identity-number{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;min-height:212px;border-radius:24px;background:linear-gradient(140deg,rgba(137,40,189,.24),rgba(70,21,107,.25));border:1px solid rgba(224,141,249,.28);text-align:center}
+.cohort-identity-number>span{font-size:10px;font-weight:800;letter-spacing:2px;color:#dca8fa}
+.cohort-identity-number strong{font:800 clamp(80px,11vw,132px)/1.15 'Space Grotesk',system-ui,sans-serif;letter-spacing:-8px;background:linear-gradient(145deg,#fff,#ef88ff 55%,#a66dff);background-clip:text;-webkit-background-clip:text;color:transparent;text-shadow:0 15px 55px rgba(218,90,250,.2)}
+.cohort-identity-number small{font-size:10px;font-weight:800;letter-spacing:4px;color:#cfa5ec}
+/* يظهر الرابط في الفوتر المشترك مهما كانت الصفحة الحالية */
+.footer-instagram-link{display:inline-flex;align-items:center;gap:9px;max-width:100%;margin:12px 0 4px;padding:10px 14px;text-decoration:none;border-radius:999px;border:1px solid rgba(231,117,248,.38);background:rgba(181,66,218,.14);color:#f2c9ff;font-size:12px;font-weight:800;transition:background .2s,border-color .2s,transform .2s}
+.footer-instagram-link:hover{transform:translateY(-2px);background:rgba(199,58,233,.24);border-color:#eb87f7}
+.footer-instagram-link:focus-visible{outline:3px solid #bc7eff;outline-offset:3px}
+html[data-theme='light'] .cohort-identity-card{background:radial-gradient(circle at 82% 20%,rgba(34,166,255,.17),transparent 55%),linear-gradient(120deg,#fff,#edf7ff);border-color:#c4def9;box-shadow:0 20px 48px rgba(34,103,177,.09)}
+html[data-theme='light'] .cohort-identity-card:before{background-image:linear-gradient(rgba(0,131,239,.13) 1px,transparent 1px),linear-gradient(90deg,rgba(0,131,239,.13) 1px,transparent 1px)}
+html[data-theme='light'] .cohort-identity-label{color:#0879d8}
+html[data-theme='light'] .cohort-identity-copy h2{color:#112554}
+html[data-theme='light'] .cohort-identity-copy h2 span{background:linear-gradient(100deg,#006ce4,#00b6f6);background-clip:text;-webkit-background-clip:text}
+html[data-theme='light'] .cohort-identity-copy p{color:#506e97}
+html[data-theme='light'] .cohort-identity-tags>span{color:#1764a2;background:#e7f5ff;border-color:#c9e5fc}
+html[data-theme='light'] .cohort-identity-number{background:linear-gradient(150deg,#e6f5ff,#d3eaff);border-color:#b5dffc}
+html[data-theme='light'] .cohort-identity-number>span,html[data-theme='light'] .cohort-identity-number small{color:#237bc3}
+html[data-theme='light'] .cohort-identity-number strong{background:linear-gradient(140deg,#0756cb,#009cee);background-clip:text;-webkit-background-clip:text;text-shadow:none}
+html[data-theme='light'] .footer-instagram-link{color:#096db6;border-color:#b4defa;background:#e6f5ff}
+html[data-theme='light'] .footer-instagram-link:hover{background:#d4ecff;border-color:#5bbaff}
+@media(max-width:680px){.cohort-identity-section{padding-block:30px 4px}.cohort-identity-card{grid-template-columns:1fr;padding:24px 20px;gap:20px;border-radius:20px}.cohort-identity-copy h2{font-size:30px}.cohort-identity-copy p{font-size:12px;line-height:2}.cohort-identity-tags>span{font-size:10px}.cohort-identity-number{min-height:145px}.cohort-identity-number strong{font-size:90px}.footer-instagram-link{font-size:11px}}

@@ -1,0 +1,159 @@
+/* Tech Elite: scoped chat refinement. Does not replace global site fonts. */
+.te-chat-page.section {
+  padding-top: 12px;
+  padding-bottom: 18px;
+}
+
+.te-chat-page > .container {
+  max-width: 1400px;
+}
+
+.te-chat-page .te-chat-shell {
+  max-width: 1280px;
+  width: 100%;
+  margin-inline: auto;
+}
+
+/* Conversation occupies the space previously wasted above the toolbar. */
+.te-chat-page .te-chat-shell.has-conversation {
+  display: flex;
+  flex-direction: column;
+  /* Fit inside the visible browser viewport; only messages scroll.
+     Approximate desktop header/nav + disclosure space: 280px. */
+  height: calc(100vh - 280px);
+  height: calc(100dvh - 280px);
+  min-height: 0;
+  max-height: none;
+  overflow: hidden;
+  padding: 12px 14px 10px;
+  border: 1px solid rgba(132, 165, 207, 0.35);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.34);
+  box-shadow: 0 12px 36px rgba(32, 71, 116, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.te-chat-page .te-chat-topbar {
+  flex: 0 0 auto;
+  padding: 5px 10px 12px;
+  margin: 0;
+}
+
+.te-chat-page .te-chat-feed {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: 20px;
+  overflow-y: auto;
+  padding: 20px 22px 24px;
+  border: 1px solid rgba(146, 175, 210, 0.26);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.35);
+  scrollbar-width: thin;
+  scrollbar-color: var(--chat-border, #c5d8ea) transparent;
+}
+
+.te-chat-page .te-chat-feed::-webkit-scrollbar { width: 7px; }
+.te-chat-page .te-chat-feed::-webkit-scrollbar-track { background: transparent; }
+.te-chat-page .te-chat-feed::-webkit-scrollbar-thumb {
+  background: var(--chat-border, #c5d8ea);
+  border-radius: 50px;
+}
+
+/* Keep student messages as compact bubbles, assistant messages open and readable. */
+.te-chat-page .te-chat-entry.from-student {
+  max-width: min(80%, 650px);
+  padding: 12px 17px;
+  border-radius: 18px 18px 6px 18px;
+  background: rgba(230, 240, 253, 0.82);
+  border: 1px solid rgba(167, 193, 224, 0.25);
+}
+.te-chat-page .te-chat-entry.from-bot {
+  gap: 13px;
+  padding: 3px 0 10px;
+}
+.te-chat-page .te-chat-mini-icon {
+  width: 33px;
+  height: 33px;
+  flex: 0 0 33px;
+  border-radius: 12px;
+}
+.te-chat-page .te-chat-content {
+  font-family: 'Cairo', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 2;
+}
+.te-chat-page .te-chat-entry .te-chat-message-text {
+  margin: 0;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 2.05;
+  letter-spacing: 0;
+  font-weight: 500;
+  color: var(--chat-text, #1b3657);
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  unicode-bidi: plaintext;
+  text-align: start;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-message-text { max-width: 850px; }
+.te-chat-page .te-chat-entry.from-student .te-chat-message-text { font-weight: 600; }
+
+.te-chat-page .te-chat-file-links { margin-top: 16px; gap: 9px; }
+.te-chat-page .te-chat-file-links a {
+  min-height: 43px;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.8;
+  border-radius: 14px;
+  transition: background .15s ease, border-color .15s ease;
+}
+.te-chat-page .te-chat-file-links a:hover {
+  background: var(--chat-input, rgba(234, 244, 255, 0.92));
+}
+.te-chat-page .te-chat-followups { gap: 8px; margin-top: 14px; }
+.te-chat-page .te-chat-followups button { padding: 8px 13px; font-size: 12px; line-height: 1.7; }
+.te-chat-page .te-chat-destination { font-size: 13px; margin-top: 12px; }
+.te-chat-page .te-chat-composer textarea { font-size: 15px; line-height: 1.9; }
+.te-chat-page .te-chat-fixed-composer { flex: 0 0 auto; padding-top: 10px; }
+.te-chat-page .te-chat-footnote { flex: 0 0 auto; }
+
+/* Keep the settings popover visible beyond the toolbar without a blank reservation. */
+.te-chat-page .te-chat-topbar,
+.te-chat-page .te-chat-topbar-actions { overflow: visible; }
+
+@media (max-width: 700px) {
+  .te-chat-page.section { padding-top: 6px; padding-bottom: 10px; }
+  .te-chat-page .te-chat-shell.has-conversation {
+    height: calc(100vh - 215px);
+    height: calc(100dvh - 215px);
+    min-height: 0;
+    max-height: none;
+    padding: 8px;
+    border-radius: 17px;
+  }
+  .te-chat-page .te-chat-feed { gap: 17px; padding: 14px 10px 18px; }
+  .te-chat-page .te-chat-entry .te-chat-message-text { font-size: 14px; line-height: 2.05; }
+  .te-chat-page .te-chat-entry.from-student { max-width: 90%; padding: 10px 13px; }
+  .te-chat-page .te-chat-entry.from-bot { gap: 9px; }
+  .te-chat-page .te-chat-mini-icon { width: 28px; height: 28px; flex-basis: 28px; }
+  .te-chat-page .te-chat-file-links a { font-size: 12px; max-width: 100%; }
+  .te-chat-page .te-chat-composer textarea { font-size: 14px; }
+  .te-chat-page .te-chat-topbar { padding: 3px 4px 9px; }
+}
+
+/* Don't let the input expand the viewport-sized conversation. */
+.te-chat-page .te-chat-composer { flex-shrink: 0; }
+.te-chat-page .te-chat-feed { overscroll-behavior: contain; }
+@media (max-height: 650px) and (min-width: 701px) {
+  .te-chat-page .te-chat-shell.has-conversation {
+    height: calc(100dvh - 250px);
+  }
+  .te-chat-page .te-chat-feed { padding-block: 10px; }
+}

@@ -1,0 +1,34 @@
+/* Tech Elite: dark-theme chat surface fix and a home-page quiz entry.
+   No viewport dimensions, composer dimensions, or academic filtering are changed. */
+html[data-theme='dark'] body.te-chat-viewport-route .te-chat-page .te-chat-shell.has-conversation {
+  background: rgba(27, 16, 43, .92) !important;
+  border-color: rgba(186, 112, 231, .30) !important;
+  box-shadow: 0 12px 36px rgba(5, 2, 15, .20) !important;
+}
+html[data-theme='dark'] body.te-chat-viewport-route .te-chat-page .te-chat-feed {
+  background: rgba(22, 13, 36, .72) !important;
+  border-color: rgba(180, 112, 220, .21) !important;
+}
+html[data-theme='dark'] body.te-chat-viewport-route .te-chat-page .te-chat-entry.from-student {
+  background: rgba(88, 51, 120, .74) !important;
+  border-color: rgba(195, 131, 234, .22) !important;
+}
+html[data-theme='dark'] body.te-chat-viewport-route .te-chat-page .te-chat-entry.from-student .te-chat-message-text,
+html[data-theme='dark'] body.te-chat-viewport-route .te-chat-page .te-chat-entry.from-bot .te-chat-message-text {
+  color: #f7f0ff !important;
+}
+html[data-theme='dark'] body.te-chat-viewport-route .te-chat-page .te-chat-followups button {
+  background: rgba(90, 55, 120, .22);
+  color: #dbc5ef;
+}
+html[data-theme='dark'] body.te-chat-viewport-route .te-chat-page .te-chat-topbar {
+  color: #f7f0ff;
+}
+/* A compact call-to-action immediately after the Discover Your Track section. */
+.te-home-quiz-entry { display: flex; justify-content: center; margin: 20px auto 0; }
+.te-home-quiz-entry-button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 24px; border-radius: 999px; border: 1px solid rgba(178, 123, 229, .55); color: #fff; background: linear-gradient(125deg, #7e38c5, #5f27ad); font: inherit; font-weight: 800; cursor: pointer; box-shadow: 0 8px 22px rgba(75, 35, 138, .18); }
+.te-home-quiz-entry-button:hover { filter: brightness(1.09); }
+.te-home-quiz-entry-button:focus-visible { outline: 3px solid #ae79e8; outline-offset: 3px; }
+.te-home-quiz-panel { max-width: 960px; margin: 14px auto 0; scroll-margin-top: 115px; }
+.te-home-quiz-panel .te-quiz-spot { position: relative; inset: auto; margin: 0; max-width: 100%; }
+@media(max-width:700px) { .te-home-quiz-entry { margin-top: 14px; } .te-home-quiz-entry-button { width: min(100%, 350px); } .te-home-quiz-panel { scroll-margin-top: 85px; } }

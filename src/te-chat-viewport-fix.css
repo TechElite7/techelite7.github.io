@@ -1,0 +1,321 @@
+/* Tech Elite: viewport chat layout, isolated to the legacy assistant route.
+   Imported last by MajorChoice. No global fonts or AI logic changed. */
+html body.te-chat-viewport-route .site-footer { display: none !important; }
+html body.te-chat-viewport-route { overflow-x: hidden !important; overflow-y: auto !important; }
+body.te-chat-viewport-route #main-content {
+  min-height: 0 !important;
+  height: calc(100dvh - var(--te-chat-top-offset, 216px));
+  overflow: visible;
+}
+body.te-chat-viewport-route .te-assistant-only {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  overflow: visible;
+}
+body.te-chat-viewport-route .te-chat-page.section {
+  flex: 0 0 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 8px 12px 8px !important;
+  display: flex;
+  flex-direction: column;
+}
+body.te-chat-viewport-route .te-chat-page > .container {
+  width: 100%;
+  max-width: 1400px;
+  min-height: 0;
+  height: 100%;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-shell {
+  width: 100%;
+  max-width: 1280px;
+  min-height: 0;
+  flex: 1 1 auto;
+  margin: 0 auto;
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-shell.has-conversation {
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 9px 12px 6px;
+  border: 1px solid rgba(139,171,212,.38);
+  border-radius: 22px;
+  background: rgba(255,255,255,.28);
+  box-shadow: 0 12px 32px rgba(36,65,112,.06);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-shell.is-welcome {
+  height: auto;
+  min-height: 0;
+  justify-content: center;
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar {
+  flex: 0 0 auto;
+  padding: 4px 6px 9px;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-feed {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  justify-content: flex-start;
+  gap: 15px;
+  padding: 14px 18px !important;
+  background: rgba(255,255,255,.25);
+  border: 1px solid rgba(145,178,216,.26);
+  border-radius: 16px;
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-fixed-composer {
+  flex: 0 0 auto;
+  padding: 8px 3px 3px;
+  margin: 0;
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-footnote {
+  flex: 0 0 auto;
+  margin: 3px 4px 0;
+  gap: 6px;
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-disclosure {
+  flex: 0 0 auto;
+  margin: 3px auto 0;
+  font-size: 9px;
+  line-height: 1.3;
+  opacity: .7;
+}
+/* Keep the existing quiz design BELOW the chat, not floating over messages.
+   It does not shrink the chat because the chat section has fixed flex-basis 100%. */
+body.te-chat-viewport-route .te-assistant-only > .te-quiz-spot {
+  position: static;
+  width: auto;
+  max-width: none;
+  flex: 0 0 auto;
+}
+/* Popover opens toward the chat rather than hanging off its left edge. */
+body.te-chat-viewport-route .te-scope-wrap .te-scope-popover {
+  left: 0;
+  right: auto;
+  transform: none;
+  max-width: calc(100vw - 24px);
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-file-links a {
+  transition: background .15s ease, border-color .15s ease;
+}
+@media (max-width:700px) {
+  body.te-chat-viewport-route .te-chat-page.section { padding: 4px 5px 5px !important; }
+  body.te-chat-viewport-route .te-chat-page .te-chat-shell.has-conversation { border-radius: 15px; padding: 6px; }
+  body.te-chat-viewport-route .te-chat-page .te-chat-feed { padding: 10px 9px !important; gap: 12px; }
+  body.te-chat-viewport-route .te-chat-page .te-chat-disclosure { display: none; }
+}
+@media (max-height:600px) {
+  body.te-chat-viewport-route .te-chat-page .te-chat-disclosure { display: none; }
+  body.te-chat-viewport-route .te-chat-page .te-chat-footnote { display: none; }
+}
+
+/* On short and mobile screens keep the controls visible within the viewport. */
+@media (max-width: 700px) {
+  body.te-chat-viewport-route .te-scope-wrap .te-scope-popover {
+    left: 0;
+    right: auto;
+    transform: none;
+    width: min(320px, calc(100vw - 24px));
+  }
+}
+
+/* Tech Elite: scope popover visual + mobile alignment ONLY.
+   Append to the END of src/te-chat-viewport-fix.css.
+   No chat dimensions, quiz, or AI logic are changed. */
+body.te-chat-viewport-route .te-chat-page .te-scope-wrap .te-scope-popover {
+  left: auto;
+  right: 0;
+  transform: none;
+  width: min(300px, calc(100vw - 24px));
+  max-width: calc(100vw - 24px);
+  box-sizing: border-box;
+}
+
+html[data-theme='dark'] body.te-chat-viewport-route .te-chat-page .te-scope-wrap .te-scope-popover {
+  background: #21182f;
+  color: #f6efff;
+  border: 1px solid rgba(194, 145, 235, .36);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, .38);
+}
+html[data-theme='dark'] body.te-chat-viewport-route .te-scope-head span,
+html[data-theme='dark'] body.te-chat-viewport-route .te-scope-fields label {
+  color: #cbb9de;
+}
+html[data-theme='dark'] body.te-chat-viewport-route .te-scope-fields select {
+  background: #32253f;
+  color: #f6efff;
+  border-color: rgba(194, 145, 235, .3);
+  color-scheme: dark;
+}
+html[data-theme='dark'] body.te-chat-viewport-route .te-scope-actions button {
+  background: #32253f;
+  color: #ebd8ff;
+  border-color: rgba(194, 145, 235, .35);
+}
+html[data-theme='dark'] body.te-chat-viewport-route .te-scope-actions button:last-child {
+  background: #a45ee0;
+  border-color: #a45ee0;
+  color: #fff;
+}
+@media (max-width: 700px) {
+  body.te-chat-viewport-route .te-chat-page .te-scope-wrap .te-scope-popover {
+    left: auto;
+    right: 0;
+    transform: none;
+    width: min(260px, calc(100vw - 20px));
+    max-width: calc(100vw - 20px);
+    padding: 12px;
+  }
+  body.te-chat-viewport-route .te-scope-fields { gap: 5px; }
+}
+/* Tech Elite — place search options at the RIGHT edge of the chat header.
+   Append at the very end of src/te-chat-viewport-fix.css.
+   No changes to chat size, colors, quiz, or AI behavior. */
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar {
+  position: relative;
+  z-index: 80;
+  overflow: visible;
+}
+/* The trigger is on the left in RTL. Don't anchor the panel to that trigger. */
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar-actions,
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar-actions .te-scope-wrap {
+  position: static;
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar .te-scope-popover,
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar-actions .te-scope-wrap .te-scope-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 6px;
+  left: auto;
+  transform: none;
+  width: min(340px, calc(100% - 12px));
+  max-width: calc(100% - 12px);
+  box-sizing: border-box;
+  z-index: 100;
+}
+@media (max-width: 700px) {
+  body.te-chat-viewport-route .te-chat-page .te-chat-topbar .te-scope-popover,
+  body.te-chat-viewport-route .te-chat-page .te-chat-topbar-actions .te-scope-wrap .te-scope-popover {
+    right: 0;
+    left: auto;
+    width: min(310px, calc(100% - 4px));
+    max-width: calc(100% - 4px);
+    transform: none;
+  }
+}
+
+/* Tech Elite: prevent chat controls overlapping mobile navigation */
+@media (max-width: 700px) {
+  body:has(.primary-nav.is-open) .te-chat-page .te-chat-topbar {
+    z-index: 0 !important;
+  }
+
+  body:has(.primary-nav.is-open) .te-chat-page .te-scope-wrap {
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
+/* TE-LEARNING-V2: Scope menu anchored to the RIGHT edge of CHAT, not its left-side button.
+   Only changes popover placement and layering; no changes to chat dimensions. */
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar { position:relative; overflow:visible; z-index:40; }
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar-actions,
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar-actions .te-scope-wrap { position:static; }
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar .te-scope-popover {
+  position:absolute; inset:auto 8px auto auto; top:calc(100% + 6px);
+  left:auto !important; right:8px !important; transform:none !important;
+  width:min(340px,calc(100% - 16px)); max-width:calc(100% - 16px);
+  box-sizing:border-box; z-index:80;
+}
+@media(max-width:700px) {
+  body.te-chat-viewport-route .te-chat-page .te-chat-topbar .te-scope-popover {
+    right:4px !important; left:auto !important; transform:none !important;
+    width:min(300px,calc(100% - 8px)); max-width:calc(100% - 8px);
+  }
+}
+/* Hide the underlying scope control only while the site's mobile menu is OPEN. */
+body:has(.primary-nav.is-open) .te-chat-page .te-chat-topbar-actions .te-scope-wrap {
+  visibility:hidden; pointer-events:none;
+}
+/* END TE-LEARNING-V2 */
+
+/* TECH-ELITE-V3-SCOPE-RIGHT
+   Anchor the academic filter to the RIGHT edge of the chat in both modes.
+   Does not change the chat width, height, padding, fonts, or AI logic.
+*/
+/* In an active conversation the topbar is our stable positioning container. */
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar {
+  position: relative !important;
+  z-index: 80 !important;
+  overflow: visible !important;
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar-actions,
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar-actions .te-scope-wrap {
+  position: static !important;
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-topbar .te-scope-popover {
+  position: absolute !important;
+  left: auto !important;
+  right: 8px !important;
+  top: calc(100% + 6px) !important;
+  bottom: auto !important;
+  transform: none !important;
+  width: min(340px, calc(100% - 16px)) !important;
+  max-width: calc(100% - 16px) !important;
+  box-sizing: border-box;
+  z-index: 100 !important;
+  text-align: right;
+}
+/* New conversation: wrapper fills the welcome area, button stays centered,
+   dropdown aligns with the RIGHT edge of that area rather than the button. */
+body.te-chat-viewport-route .te-chat-page .te-chat-welcome > .te-scope-wrap {
+  position: relative !important;
+  display: flex;
+  justify-content: center;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-inline: 0 !important;
+}
+body.te-chat-viewport-route .te-chat-page .te-chat-welcome > .te-scope-wrap .te-scope-popover {
+  position: absolute !important;
+  right: 4px !important;
+  left: auto !important;
+  top: calc(100% + 8px) !important;
+  transform: none !important;
+  width: min(340px, calc(100% - 8px)) !important;
+  max-width: calc(100% - 8px) !important;
+  box-sizing: border-box;
+  text-align: right;
+  z-index: 100 !important;
+}
+@media (max-width: 700px) {
+  body.te-chat-viewport-route .te-chat-page .te-chat-topbar .te-scope-popover {
+    right: 4px !important;
+    width: min(315px, calc(100% - 8px)) !important;
+    max-width: calc(100% - 8px) !important;
+  }
+}
+/* Don't allow the search dialog to float through the mobile navigation. */
+body:has(.primary-nav.is-open) .te-chat-page .te-scope-wrap {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+/* END TECH-ELITE-V3-SCOPE-RIGHT */

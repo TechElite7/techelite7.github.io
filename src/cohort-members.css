@@ -1,0 +1,31 @@
+/* Members of Tech Elite, respecting light and dark palettes */
+.te-cohort-members{position:relative}
+.te-members-panel{display:grid;gap:23px}
+.te-members-block{border:1px solid var(--line);background:var(--surface);border-radius:24px;padding:27px;box-shadow:0 12px 30px rgba(0,0,0,.035)}
+.te-members-heading{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.te-members-icon{width:48px;height:48px;flex:0 0 48px;display:grid;place-items:center;border-radius:15px;color:var(--pink);background:rgba(182,57,227,.12);border:1px solid var(--line)}
+.te-members-heading>div{flex:1}.te-members-heading h3{margin:0 0 3px;color:var(--text);font-size:19px}.te-members-heading p{margin:0;color:var(--muted);font-size:12px;line-height:1.8}
+.te-members-count{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:5px 12px;border-radius:99px}
+.te-members-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.te-person-card{display:flex;align-items:center;gap:13px;border:1px solid var(--line);border-radius:16px;padding:15px;background:var(--surface2)}
+.te-person-avatar{width:43px;height:43px;flex:0 0 43px;border-radius:13px;display:grid;place-items:center;overflow:hidden;background:linear-gradient(140deg,#7d2de3,#e342cf);color:white;font-weight:800;font-size:18px}
+.te-person-avatar img{width:100%;height:100%;object-fit:cover}
+.te-person-copy{min-width:0;flex:1}.te-person-copy h4{font-size:13px;margin:0 0 4px;color:var(--text);overflow-wrap:anywhere}.te-person-copy p{font-size:11px;color:var(--muted);margin:0}
+.te-person-link{color:var(--pink)}.te-person-link:hover{text-decoration:underline}
+.te-members-empty{margin:0;background:var(--surface2);border:1px dashed var(--line);color:var(--muted);padding:19px 22px;border-radius:15px;font-size:12px;line-height:2}
+.te-members-note{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:12px;margin:19px 0 0;flex-wrap:wrap}.te-members-note code{direction:ltr;unicode-bidi:embed;color:var(--text);font-size:12px}
+html[data-theme='light'] .te-members-icon{color:#147de4;background:#e4f4ff;border-color:#d7ebff}
+html[data-theme='light'] .te-person-avatar{background:linear-gradient(140deg,#1464e9,#16bafa)}
+html[data-theme='light'] .te-person-link{color:#1275de}
+@media(max-width:850px){.te-members-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.te-members-block{padding:17px}.te-members-grid{grid-template-columns:1fr}.te-members-heading h3{font-size:16px}.te-members-heading p{font-size:11px}}
+
+/* Tech Elite — show first 10 students, with an optional expand action */
+.te-students-show-more{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.te-students-show-count{font-size:13px;color:var(--muted)}
+.te-students-show-more-btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;cursor:pointer;min-height:44px;padding:11px 22px;border-radius:999px;border:1px solid var(--line);font:inherit;font-size:13px;font-weight:800;color:var(--text);background:var(--surface2);transition:transform .2s,border-color .2s,box-shadow .2s}
+.te-students-show-more-btn:hover{transform:translateY(-2px);border-color:var(--pink);box-shadow:0 8px 24px rgba(135,45,200,.14)}
+.te-students-show-more-btn:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+.te-students-show-more-btn span{font-size:19px;line-height:1;color:var(--pink)}
+html[data-theme='light'] .te-students-show-more-btn span{color:#147de4}
+@media(max-width:580px){.te-students-show-more{flex-direction:column}.te-students-show-more-btn{width:100%}}

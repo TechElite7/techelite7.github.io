@@ -1,0 +1,19 @@
+/* Compact scope selector; keeps chat history visible. */
+.te-chat-topbar-actions{display:flex;align-items:center;gap:8px;min-width:0}
+.te-scope-wrap{position:relative;display:inline-flex;align-items:center;z-index:30;max-width:100%;font:inherit}
+.te-scope-trigger{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:33px;max-width:100%;padding:5px 10px;border:1px solid #c8daf2;border-radius:999px;background:rgba(255,255,255,.65);color:#306394;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+.te-scope-trigger.is-active{color:#075da9;border-color:#93c5fd;background:#e4f2ff}
+.te-scope-trigger span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.te-scope-trigger:focus-visible{outline:2px solid #278cf4;outline-offset:2px}
+.te-scope-popover{position:absolute;right:0;top:calc(100% + 8px);width:min(340px,calc(100vw - 36px));padding:14px;border:1px solid #d0e0f4;border-radius:16px;background:#fff;color:#173b62;box-shadow:0 16px 48px rgba(20,52,85,.16);z-index:60;text-align:right}
+.te-scope-head{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:12px}
+.te-scope-head strong{font-size:14px}.te-scope-head span{font-size:11px;color:#7287a2}
+.te-scope-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.te-scope-fields label{display:flex;flex-direction:column;gap:5px;font-size:12px;color:#496685}
+.te-scope-fields select{width:100%;min-width:0;background:#f8fbff;color:#173b62;border:1px solid #cfdef0;border-radius:9px;padding:8px 4px;font:inherit;font-size:12px}
+.te-scope-actions{display:flex;justify-content:space-between;margin-top:13px;gap:8px}
+.te-scope-actions button{border:1px solid #d1e1f4;background:#f6faff;border-radius:9px;padding:6px 12px;color:#1769b1;cursor:pointer;font:inherit;font-size:12px}
+.te-scope-actions button:last-child{background:#087de2;color:white;border-color:#087de2}
+.te-chat-welcome .te-scope-wrap{margin:4px auto 12px;display:flex;width:max-content;max-width:100%}
+.te-chat-welcome .te-scope-popover{right:50%;transform:translateX(50%)}
+@media(max-width:640px){.te-chat-topbar-actions{gap:4px}.te-scope-trigger{padding:5px 7px;font-size:11px}.te-scope-popover{right:-6px}.te-scope-fields{gap:5px}}

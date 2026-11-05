@@ -1,0 +1,112 @@
+/* Tech Elite: roadmap and 6×6 tracks — dark & light identity, mobile-first fixes. */
+.te-road-page,.te-cs-page{overflow:hidden}
+.te-road-page .container,.te-cs-page .container{max-width:1250px}
+.te-road-intro{position:relative;overflow:hidden;padding:94px 0 83px;background:radial-gradient(ellipse at 22% 45%,rgba(154,35,197,.26),transparent 50%),linear-gradient(140deg,#150c2d 0%,#0b071a 70%);border-bottom:1px solid rgba(205,121,234,.15)}
+.te-road-intro:before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(230,141,255,.033) 1px,transparent 1px),linear-gradient(90deg,rgba(230,141,255,.033) 1px,transparent 1px);background-size:45px 45px;mask-image:linear-gradient(to left,#000,transparent)}
+.te-road-intro-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;gap:70px;align-items:center}
+.te-road-eyebrow,.te-cs-eyebrow{display:inline-flex;gap:8px;align-items:center;color:#e1a5ff;font-weight:800;font-size:12px;letter-spacing:.6px;border:1px solid rgba(236,141,252,.32);background:rgba(183,71,235,.1);padding:9px 15px;border-radius:50px}
+.te-road-intro h1{font-size:clamp(40px,5vw,67px);line-height:1.3;letter-spacing:-1.8px;color:#fff;margin:27px 0 18px;max-width:700px}
+.te-road-intro h1 span{display:block;background:linear-gradient(105deg,#f95aed,#8e5dff,#8bd9ff);background-clip:text;-webkit-background-clip:text;color:transparent;direction:ltr;text-align:right;font-family:'Cairo',sans-serif}
+.te-road-intro p{color:#cbbada;max-width:630px;line-height:2;font-size:15px}
+.te-road-chips{display:flex;flex-wrap:wrap;gap:9px;margin:25px 0}
+.te-road-chips span{display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(210,137,247,.24);background:rgba(255,255,255,.04);border-radius:100px;padding:8px 12px;color:#dfc4ef;font-size:11px}
+.te-road-start{display:inline-flex;gap:11px;align-items:center;justify-content:center;margin-top:12px;padding:14px 28px;color:#fff!important;border-radius:100px;background:linear-gradient(115deg,#8b24bd,#df35d2);font-weight:800;text-decoration:none;box-shadow:0 15px 38px rgba(198,55,210,.22)}
+.te-road-illustration{position:relative;min-height:395px;display:grid;place-items:center;isolation:isolate}
+.te-road-illustration:before{content:'';width:305px;height:305px;border-radius:50%;position:absolute;background:radial-gradient(circle,#8621bd 3%,#482087 34%,rgba(34,14,75,.1) 72%);filter:blur(18px)}
+.te-road-orbit{position:absolute;width:345px;height:345px;border:2px solid rgba(225,108,251,.45);border-radius:50%;transform:rotateX(65deg) rotate(-18deg);box-shadow:0 0 26px rgba(218,52,239,.12)}
+.te-road-orbit.orbit-b{transform:rotateY(65deg) rotate(23deg);width:290px;height:290px;border-color:rgba(70,169,245,.45)}
+.te-road-center-symbol{z-index:2;font-size:72px;letter-spacing:-7px;font-weight:900;color:white;text-shadow:0 0 24px #eb35dc,0 0 60px #702dff}
+.te-road-illustration>span{z-index:2;position:absolute;font:800 12px 'Cairo',sans-serif;color:#fff;background:rgba(36,13,71,.85);border:1px solid rgba(219,124,254,.54);border-radius:12px;padding:11px 17px;box-shadow:0 8px 35px rgba(186,50,221,.26)}
+.te-road-illustration>span:nth-last-child(4){top:48px;right:55px}.te-road-illustration>span:nth-last-child(3){bottom:70px;left:20px}.te-road-illustration>span:nth-last-child(2){top:73px;left:16px}.te-road-illustration>span:nth-last-child(1){bottom:40px;right:70px}
+.te-laptop-section{padding-top:65px;padding-bottom:18px}
+.te-road-section-caption{display:flex;align-items:center;gap:8px;color:#e48ef6;font-weight:800;font-size:12px;margin-bottom:17px}
+.te-laptop-card{background:radial-gradient(ellipse at 0% 0%,rgba(130,42,168,.16),transparent 55%),#1c142f;border:1px solid rgba(210,116,243,.22);border-radius:25px;padding:35px;box-shadow:0 14px 50px rgba(4,1,15,.2)}
+.te-laptop-title{display:flex;align-items:center;gap:15px}.te-laptop-title>svg{width:61px;height:61px;padding:15px;background:linear-gradient(130deg,#7631aa,#bb3bc2);border-radius:17px;color:white;flex-shrink:0}.te-laptop-title h2{font-size:25px;margin:0;color:#fff}.te-laptop-title p{color:#bbaacc;font-size:12px;margin-top:4px}
+.te-laptop-columns{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:25px 0 17px}
+.te-laptop-columns>div{background:rgba(255,255,255,.022);border:1px solid rgba(208,123,241,.12);border-radius:17px;padding:20px}
+.te-laptop-columns h3{font-size:14px;color:#fff;margin:0 0 15px}
+.te-laptop-columns p{display:flex;gap:9px;align-items:flex-start;color:#c4b6d0;font-size:12px;line-height:1.9;margin:9px 0}.te-laptop-columns p svg{color:#e38ef1;flex-shrink:0;margin-top:4px}
+.te-laptop-links{display:flex;flex-wrap:wrap;gap:10px}.te-laptop-card>small{display:block;color:#b8a5c9;line-height:1.9;margin-top:15px}
+.te-roadmap-container{padding-top:93px;padding-bottom:100px}
+.te-road-topline{display:flex;justify-content:space-between;gap:40px;align-items:center;margin-bottom:50px}.te-road-topline h2{font-size:clamp(28px,3.8vw,45px);color:#fff;margin:0 0 8px}.te-road-topline h2 span{color:#e45deb}.te-road-topline p{font-size:13px;color:#bfaece;max-width:690px;line-height:1.9}
+.te-road-progress{width:220px;min-width:185px;text-align:center;border:1px solid rgba(211,119,241,.23);background:#1b1230;border-radius:19px;padding:19px 20px}
+.te-road-progress strong{font:900 37px 'Cairo',sans-serif;color:#f4b6fb}.te-road-progress strong small{font-size:17px;color:#ae97c5}.te-road-progress>span{display:block;color:#bca8ce;font-size:11px}.te-road-meter{height:8px;border-radius:20px;background:#39264b;margin-top:15px;overflow:hidden}.te-road-meter>i{display:block;height:100%;background:linear-gradient(to left,#e847dc,#7f5bfb);border-radius:20px;transition:width .3s}
+.te-road-timeline{position:relative;display:grid;gap:24px}.te-road-timeline:before{content:'';position:absolute;right:27px;top:27px;bottom:50px;width:2px;background:linear-gradient(#bd55da,#3b2c61)}
+.te-road-stage{position:relative;padding-right:76px}.te-road-stage-node{position:absolute;right:0;top:20px;width:56px;height:56px;border-radius:17px;background:linear-gradient(140deg,#64238a,#a32eb7);display:grid;place-items:center;border:2px solid #c457d1;box-shadow:0 8px 30px rgba(179,60,202,.25)}
+.te-road-stage-node span{color:white;font:900 20px 'Cairo',sans-serif}
+.te-road-stage.is-done .te-road-stage-node{background:linear-gradient(140deg,#167d6c,#27b29d);border-color:#45dfc1}
+.te-road-stage-shell{border:1px solid rgba(205,119,240,.22);border-radius:23px;background:linear-gradient(145deg,rgba(40,22,64,.95),rgba(21,13,37,.95));overflow:hidden;transition:box-shadow .2s}
+.te-road-stage.is-open .te-road-stage-shell{box-shadow:0 16px 47px rgba(0,0,0,.12);border-color:rgba(217,116,238,.46)}
+.te-road-stage-heading{display:flex;width:100%;justify-content:space-between;align-items:center;text-align:right;gap:20px;background:transparent;color:white;border:0;padding:25px 30px;cursor:pointer}
+.te-road-stage-heading>span{display:flex;flex-direction:column;gap:6px;align-items:flex-start;min-width:0}.te-road-stage-heading small{font-size:10px;font-weight:800;color:#e696ee}.te-road-stage-heading small b{font-weight:600;color:#9e93b5;margin-right:12px}.te-road-stage-heading strong{font-size:21px}.te-road-stage-heading em{font-style:normal;font-size:12px;color:#bcaacb;line-height:1.7}.te-road-stage-heading>svg{color:#dc90f1;flex-shrink:0}
+.te-road-stage-details{border-top:1px solid rgba(202,111,237,.14);padding:26px 30px}.te-road-stage-details h3{display:flex;gap:8px;align-items:center;font-size:14px;color:#f9e8ff;margin:0 0 14px}.te-road-skills>div{display:flex;gap:8px;flex-wrap:wrap}.te-road-skills span{display:inline-flex;gap:7px;align-items:center;background:#342044;border:1px solid rgba(224,114,243,.18);color:#e2cce9;font-size:11px;border-radius:12px;padding:9px 12px}.te-road-skills span svg{color:#f387f3}
+.te-road-practice{display:flex;align-items:flex-start;gap:10px;background:rgba(211,104,227,.09);border-right:3px solid #bc50d8;border-radius:10px;margin:20px 0;padding:15px 17px;color:#d9c6e1}.te-road-practice>svg{color:#e690f5;flex-shrink:0;margin-top:2px}.te-road-practice p{font-size:12px;line-height:1.9;margin:0}
+.te-road-sources{display:grid;grid-template-columns:1fr 1fr;gap:25px}.te-road-sources>div{display:grid;align-content:start;gap:9px}.te-road-sources h3{margin-bottom:3px}
+.te-road-link{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(207,116,228,.21);background:rgba(255,255,255,.025);border-radius:11px;padding:12px 13px;color:#ead4fa;text-decoration:none;font-size:11px;transition:background .2s}.te-road-link>span{display:flex;align-items:center;gap:8px}.te-road-link>svg{flex-shrink:0;opacity:.8}.te-road-link:hover{background:rgba(207,91,231,.15);border-color:#c35eda}
+.te-road-no-tools{color:#a99bb6;font-size:12px}
+.te-road-stage-foot{margin-top:25px;display:flex;justify-content:space-between;align-items:center;gap:18px}.te-road-stage-foot>span{display:flex;align-items:center;gap:7px;color:#a996be;font-size:11px}
+.te-road-complete{display:inline-flex;gap:7px;align-items:center;justify-content:center;background:#342344;color:#f2d9fc;border:1px solid rgba(229,132,246,.35);font:800 11px 'Cairo',sans-serif;padding:11px 16px;border-radius:10px;cursor:pointer}.te-road-complete.finished{background:#0d4e47;color:#a4fff1;border-color:#48ac99}
+.te-road-finish{display:flex;gap:23px;align-items:center;background:linear-gradient(110deg,#39205c,#1b1131);border:1px solid rgba(204,115,238,.35);border-radius:25px;padding:30px;margin-top:55px}.te-road-finish>svg{color:#ee8bf7;flex-shrink:0}.te-road-finish>div{flex:1}.te-road-finish h3{color:#fff;font-size:19px;margin:0 0 8px}.te-road-finish p{font-size:12px;line-height:1.9;color:#c6b4d8;margin:0}.te-road-finish>a{color:#f5caff;font-size:11px;display:inline-flex;gap:7px;align-items:center;max-width:220px}
+/* Existing IT track cards are preserved; 3 cards per row on desktop. */
+.te-track-collections .te-six-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.te-track-collections .te-six-card{min-height:235px;padding:23px}.te-track-collections .te-six-card p{max-width:38ch}
+.te-track-guide-cta{display:flex;align-items:center;gap:15px;text-align:right;width:100%;padding:20px 22px;margin:21px 0 60px;border-radius:18px;border:1px solid rgba(227,121,246,.33);color:#f4ddff;background:radial-gradient(ellipse at right,rgba(202,47,198,.2),transparent 75%),#21112e;cursor:pointer}
+.te-track-guide-cta>svg:first-child{color:#f48ef4}.te-track-guide-cta>span{display:grid;gap:5px;flex:1}.te-track-guide-cta strong{font-size:14px}.te-track-guide-cta small{font-size:11px;color:#c5a5d4}
+.te-cs-track-heading{margin-bottom:22px}.te-cs-label{display:inline-flex;gap:8px;align-items:center;font-size:11px;color:#e98cf8;font-weight:800;letter-spacing:1px}.te-cs-track-heading h3{font-size:clamp(27px,3.1vw,40px);margin:12px 0;color:#fff}.te-cs-track-heading h3 em{font-style:normal;color:#e260e8}.te-cs-track-heading p{color:#bcaace;font-size:12px;line-height:1.9}.te-cs-six-grid .track-icon{background:linear-gradient(130deg,#452259,#261f58);color:#dca8ff}
+.te-cs-more{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:13px 22px;border-radius:100px;border:1px solid rgba(221,103,242,.45);background:#382047;color:#f4c2fd;cursor:pointer;font-weight:800;font-size:12px}.te-track-reference{color:#a99ab8;font-size:10px;margin-top:16px}.te-track-reference a{color:#e696f2}
+.te-cs-hero{background:radial-gradient(ellipse at 70% 20%,rgba(159,37,197,.3),transparent 53%),linear-gradient(145deg,#170b29,#0c081c);padding:90px 0;border-bottom:1px solid rgba(198,123,239,.17)}
+.te-cs-hero h1{font-size:clamp(40px,5vw,70px);color:white;margin:20px 0}.te-cs-hero h1 span{color:#ed65f3}.te-cs-hero p{max-width:720px;color:#c4b4d4;font-size:16px;line-height:2}.te-cs-hero-icons{display:flex;gap:18px;color:#c873f6;margin-top:30px}.te-cs-hero-icons svg{width:29px;height:29px}.te-cs-info{display:grid;grid-template-columns:repeat(3,1fr);gap:19px;padding:70px 0}.te-cs-info>div{background:#1a102a;border:1px solid rgba(215,119,241,.22);border-radius:21px;padding:30px}.te-cs-info span{color:#d882e9;font:800 11px 'Cairo',sans-serif}.te-cs-info h2{color:white;font-size:21px;margin:15px 0}.te-cs-info p{color:#bcafcf;line-height:2;font-size:12px}
+.te-cs-reference{display:flex;gap:14px;background:#29173a;border:1px solid rgba(220,120,240,.25);padding:27px;border-radius:20px;margin-bottom:80px}.te-cs-reference>svg{color:#ef97fc;flex-shrink:0}.te-cs-reference strong{color:#fff}.te-cs-reference p{color:#d1bddc;font-size:12px;line-height:1.9}.te-cs-reference a{display:inline-flex;align-items:center;gap:6px;color:#f2a7fa;font-size:12px}
+/* Day theme: white + sky blue, no purple accents. */
+html[data-theme='light'] .te-road-intro,html[data-theme='light'] .te-cs-hero{background:radial-gradient(ellipse at 24% 52%,rgba(0,169,255,.16),transparent 59%),linear-gradient(125deg,#eef8ff,#fff)}
+html[data-theme='light'] .te-road-intro h1,html[data-theme='light'] .te-cs-hero h1{color:#0a1b4a}
+html[data-theme='light'] .te-road-intro h1 span{background:linear-gradient(120deg,#005cf0,#06b7f4);background-clip:text;-webkit-background-clip:text;color:transparent}
+html[data-theme='light'] .te-road-intro p,html[data-theme='light'] .te-cs-hero p{color:#4b658b}
+html[data-theme='light'] .te-road-eyebrow,html[data-theme='light'] .te-cs-eyebrow,html[data-theme='light'] .te-road-section-caption,html[data-theme='light'] .te-cs-label{color:#096bdd;border-color:rgba(27,129,244,.23);background:rgba(28,135,245,.065)}
+html[data-theme='light'] .te-road-start{background:linear-gradient(110deg,#075de7,#08b6f5);box-shadow:0 15px 38px rgba(28,132,231,.18)}
+html[data-theme='light'] .te-road-chips span{color:#34668e;background:#fff;border-color:#cbe5fc}
+html[data-theme='light'] .te-road-illustration:before{background:radial-gradient(circle,#53b7ff,#9bd7ff 33%,transparent 73%)}
+html[data-theme='light'] .te-road-orbit{border-color:rgba(27,125,235,.43)}
+html[data-theme='light'] .te-road-illustration>span{background:rgba(238,249,255,.94);border-color:#8bceff;color:#0755a9;box-shadow:0 8px 35px rgba(32,124,224,.16)}
+html[data-theme='light'] .te-road-center-symbol{color:#0967e2;text-shadow:0 0 24px #78d5ff,0 0 60px #a6d2ff}
+html[data-theme='light'] .te-laptop-card,html[data-theme='light'] .te-road-stage-shell,html[data-theme='light'] .te-cs-info>div{background:linear-gradient(130deg,#fff,#f5fbff);border-color:#d6e9fc;box-shadow:0 15px 40px rgba(37,103,193,.05)}
+html[data-theme='light'] .te-laptop-title>svg{background:linear-gradient(110deg,#0069dd,#17b5f3)}
+html[data-theme='light'] .te-laptop-title h2,html[data-theme='light'] .te-road-topline h2,html[data-theme='light'] .te-road-stage-heading,html[data-theme='light'] .te-road-stage-details h3,html[data-theme='light'] .te-cs-info h2,html[data-theme='light'] .te-cs-track-heading h3{color:#0e2453}
+html[data-theme='light'] .te-laptop-title p,html[data-theme='light'] .te-laptop-card>small,html[data-theme='light'] .te-road-topline p,html[data-theme='light'] .te-road-stage-heading em,html[data-theme='light'] .te-cs-info p,html[data-theme='light'] .te-cs-track-heading p{color:#52749c}
+html[data-theme='light'] .te-laptop-columns>div{background:#f2f9ff;border-color:#d9ebfc}
+html[data-theme='light'] .te-laptop-columns h3{color:#193561}
+html[data-theme='light'] .te-laptop-columns p{color:#42658b}
+html[data-theme='light'] .te-laptop-columns p svg{color:#078ee7}
+html[data-theme='light'] .te-road-progress{background:#fff;border-color:#d7e9f9}
+html[data-theme='light'] .te-road-progress strong{color:#0879df}
+html[data-theme='light'] .te-road-progress>span,html[data-theme='light'] .te-road-progress strong small{color:#4b729f}
+html[data-theme='light'] .te-road-meter{background:#e2f1ff}
+html[data-theme='light'] .te-road-meter i{background:linear-gradient(110deg,#0d73e9,#1dc1fa)}
+html[data-theme='light'] .te-road-timeline:before{background:#a9d8fb}
+html[data-theme='light'] .te-road-stage-node{background:linear-gradient(130deg,#0567e4,#18aff0);border-color:#7bcaff;box-shadow:0 8px 30px rgba(0,105,220,.15)}
+html[data-theme='light'] .te-road-stage-heading small{color:#126ed2}
+html[data-theme='light'] .te-road-stage-heading small b{color:#7a93b3}
+html[data-theme='light'] .te-road-stage-heading>svg{color:#1681eb}
+html[data-theme='light'] .te-road-skills span{background:#e8f5ff;border-color:#cae4fb;color:#1d5b94}
+html[data-theme='light'] .te-road-skills span svg{color:#0684e2}
+html[data-theme='light'] .te-road-practice{background:#eaf7ff;border-color:#078de8;color:#365f8b}
+html[data-theme='light'] .te-road-practice>svg{color:#0783e3}
+html[data-theme='light'] .te-road-link{color:#14528d;background:#f8fcff;border-color:#d7e7fb}
+html[data-theme='light'] .te-road-link:hover{background:#e6f5ff;border-color:#8ccbfd}
+html[data-theme='light'] .te-road-stage-foot>span,html[data-theme='light'] .te-road-no-tools{color:#6781a4}
+html[data-theme='light'] .te-road-complete{background:#e8f4ff;color:#0868bf;border-color:#bddefb}
+html[data-theme='light'] .te-road-complete.finished{background:#d7fff5;color:#116b59;border-color:#8bdac9}
+html[data-theme='light'] .te-road-finish,html[data-theme='light'] .te-cs-reference{background:linear-gradient(125deg,#e4f2ff,#f8fcff);border-color:#bcdffd}
+html[data-theme='light'] .te-road-finish h3,html[data-theme='light'] .te-cs-reference strong{color:#10366b}
+html[data-theme='light'] .te-road-finish p,html[data-theme='light'] .te-cs-reference p{color:#54729b}
+html[data-theme='light'] .te-road-finish>a,html[data-theme='light'] .te-road-finish>svg,html[data-theme='light'] .te-cs-reference a,html[data-theme='light'] .te-cs-reference>svg{color:#087fe4}
+html[data-theme='light'] .te-track-guide-cta{background:#eef8ff;color:#0c3269;border-color:#c6e5fc}
+html[data-theme='light'] .te-track-guide-cta>svg:first-child,html[data-theme='light'] .te-cs-track-heading h3 em{color:#0b84e7}
+html[data-theme='light'] .te-track-guide-cta small{color:#5c82a8}
+html[data-theme='light'] .te-cs-more{background:#fff;color:#0c67c2;border-color:#aedafc}
+html[data-theme='light'] .te-track-reference,html[data-theme='light'] .te-track-reference a{color:#3879b2}
+html[data-theme='light'] .te-cs-hero h1 span{color:#0879e9}
+html[data-theme='light'] .te-cs-hero-icons{color:#0c80e9}
+@media(max-width:950px){.te-road-intro-grid{grid-template-columns:1fr 340px;gap:25px}.te-road-illustration{transform:scale(.85)}.te-cs-info{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.te-road-intro{padding:46px 0 42px}.te-road-intro-grid{display:flex;flex-direction:column;align-items:stretch}.te-road-intro h1{font-size:35px;letter-spacing:-.6px}.te-road-intro h1 span{font-size:32px}.te-road-intro p{font-size:12px}.te-road-illustration{min-height:250px;transform:scale(.7);margin:-38px 0}.te-laptop-section{padding-top:46px}.te-laptop-card{padding:22px 16px}.te-laptop-title h2{font-size:19px}.te-laptop-title>svg{width:47px;height:47px;padding:10px}.te-laptop-columns{grid-template-columns:1fr;gap:11px}.te-laptop-columns>div{padding:15px}.te-laptop-links{flex-direction:column}.te-roadmap-container{padding-top:60px;padding-bottom:65px}.te-road-topline{flex-direction:column;align-items:stretch;gap:22px}.te-road-progress{width:100%}.te-road-timeline:before{right:19px}.te-road-stage{padding-right:50px}.te-road-stage-node{width:40px;height:40px;top:20px;border-radius:13px}.te-road-stage-node span{font-size:13px}.te-road-stage-heading{padding:17px 14px;gap:8px}.te-road-stage-heading strong{font-size:15px}.te-road-stage-heading em{font-size:11px}.te-road-stage-heading small b{display:block;margin:4px 0 0}.te-road-stage-details{padding:16px 12px}.te-road-sources{grid-template-columns:1fr;gap:25px}.te-road-stage-foot{flex-direction:column;align-items:stretch}.te-road-complete{width:100%}.te-road-finish{flex-wrap:wrap;padding:22px}.te-road-finish>a{max-width:none}.te-track-collections .te-six-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.te-track-collections .te-six-card{padding:17px 13px;min-height:248px}.te-track-guide-cta{padding:17px 14px}.te-cs-info{grid-template-columns:1fr;padding:35px 0}.te-cs-hero{padding:55px 0}.te-cs-reference{margin-bottom:50px}}
+@media(max-width:390px){.te-track-collections .te-six-grid{grid-template-columns:1fr}.te-track-collections .te-six-card{min-height:180px}.te-road-stage{padding-right:45px}.te-road-stage-heading{padding:14px 11px}.te-road-stage-heading strong{font-size:14px}}

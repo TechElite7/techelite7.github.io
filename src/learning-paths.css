@@ -1,0 +1,266 @@
+/* Tech Elite Learning Paths v1: isolated styles. Existing StudentGuide remains untouched. */
+.te-learning-page {
+  --lp-bg:#10091d; --lp-panel:#1b1130; --lp-panel-2:#241639;
+  --lp-border:rgba(190,131,246,.23); --lp-ink:#f8f3ff;
+  --lp-muted:#c1b2d1; --lp-primary:#ad55ec; --lp-glow:rgba(168,66,235,.2);
+  direction:rtl; color:var(--lp-ink); padding:22px 0 56px;
+  background:transparent; font-family:inherit;
+}
+.te-learning-page * {box-sizing:border-box}
+.te-learning-container {max-width:1240px; margin-inline:auto}
+.te-learning-page :is(button,input,select,a) {font:inherit}
+.te-learning-page button {cursor:pointer}
+.te-learning-page :is(a,button,input,select):focus-visible {outline:2px solid #d1a7ff;outline-offset:3px}
+.te-learning-header {border:1px solid var(--lp-border);border-radius:25px; padding:26px 32px; margin-bottom:16px;
+  background:radial-gradient(ellipse at 5% 15%,rgba(155,61,239,.22),transparent 45%),linear-gradient(115deg,rgba(30,14,52,.92),rgba(18,10,34,.88));
+  position:relative;overflow:hidden;isolation:isolate;box-shadow:0 16px 40px rgba(7,0,17,.15)}
+.te-learning-header::after {content:'</>';position:absolute;left:42px;top:50%;transform:translateY(-48%) rotate(-8deg);font-size:90px;font-weight:900;letter-spacing:-.13em;line-height:1;color:rgba(183,102,255,.1);pointer-events:none;z-index:-1;direction:ltr}
+.te-learn-eyebrow {display:inline-flex;gap:7px;align-items:center;font-size:12px;font-weight:750;letter-spacing:.01em;color:#d7a7fb}
+.te-learning-header h1 {font-size:clamp(27px,3vw,39px);font-weight:900;letter-spacing:-.045em;margin:9px 0 4px;line-height:1.4;color:var(--lp-ink)}
+.te-learning-header h1 span {color:#cc8bff}
+.te-learning-header p {font-size:13px;line-height:1.9;color:var(--lp-muted);margin:0;max-width:630px}
+.te-learning-tabs {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;max-width:760px;margin:0 auto 23px;padding:5px;border:1px solid var(--lp-border);background:rgba(30,16,48,.74);border-radius:18px}
+.te-learning-tabs button {border:1px solid transparent;background:transparent;color:var(--lp-muted);border-radius:13px;display:flex;align-items:center;justify-content:center;gap:9px;min-height:44px;font-size:13px;font-weight:780;transition:background .18s,border-color .18s,color .18s}
+.te-learning-tabs button:hover {color:var(--lp-ink);background:rgba(169,90,238,.10)}
+.te-learning-tabs button.active {background:linear-gradient(110deg,#7723c4,#b33cf1);color:#fff;border-color:rgba(239,205,255,.42);box-shadow:0 6px 18px rgba(146,26,203,.22)}
+/* The original guide stays as-is. We do not hide or restructure its hero, roadmap, or laptop information. */
+.te-learning-original-guide {width:100%;min-width:0}
+.te-learn-courses {display:flex;flex-direction:column;gap:19px;animation:te-learn-appear .25s ease both}
+@keyframes te-learn-appear {from{opacity:.5;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.te-learn-career {border:1px solid rgba(179,92,242,.36);border-radius:22px;padding:26px 30px;display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,300px);align-items:center;gap:26px;background:radial-gradient(circle at 0% 100%,rgba(148,49,236,.24),transparent 58%),linear-gradient(130deg,rgba(40,19,64,.94),rgba(25,13,44,.97));box-shadow:0 15px 40px rgba(6,0,20,.13)}
+.te-learn-career h2 {color:var(--lp-ink);font-size:clamp(21px,2.1vw,29px);font-weight:850;margin:8px 0 11px;line-height:1.5}
+.te-learn-career-main p {color:#e0d5ef;line-height:2.05;font-size:13.5px;max-width:720px;margin:0 0 10px}
+.te-learn-career-main strong {color:#e9c7ff;font-size:13px;line-height:1.9}
+.te-learn-career-steps {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;align-items:center}
+.te-learn-career-steps>span {display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:77px;padding:9px 5px;background:rgba(255,255,255,.045);border:1px solid rgba(213,156,255,.16);border-radius:13px;direction:ltr;color:#eee3ff;font-family:inherit;font-size:11px;font-weight:750}
+.te-learn-career-steps>span svg {color:#cf91ff}
+.te-learn-career-steps small {grid-column:1/-1;text-align:center;color:#d0b8e6;font-size:11px;line-height:1.8;margin-top:5px}
+.te-learn-courses-heading {display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:6px 4px 0}
+.te-learn-courses-heading h2 {font-size:clamp(20px,2vw,25px);font-weight:900;margin:7px 0 3px;color:var(--lp-ink)}
+.te-learn-courses-heading p {color:var(--lp-muted);font-size:12px;margin:0;line-height:1.8}
+.te-learn-count {border:1px solid var(--lp-border);border-radius:999px;padding:8px 13px;white-space:nowrap;font-size:11px;color:var(--lp-muted)}
+.te-learn-filters {display:grid;grid-template-columns:minmax(240px,1fr) minmax(150px,190px) minmax(180px,230px);gap:9px}
+.te-learn-filters label {display:flex;align-items:center;gap:9px;padding:0 13px;border:1px solid var(--lp-border);border-radius:13px;min-height:45px;background:rgba(255,255,255,.04);color:#bd84f2;min-width:0}
+.te-learn-filters :is(input,select) {min-width:0;width:100%;border:0;outline:0;background:transparent;color:var(--lp-ink);font-size:12px;direction:rtl}
+.te-learn-filters input::placeholder {color:#9f8ab4;opacity:1}
+.te-learn-filters select {appearance:none;cursor:pointer}
+.te-learn-filters select option {background:#241637;color:#fff}
+.te-learn-categories {display:flex;gap:7px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:var(--lp-border) transparent;padding:0 1px 6px}
+.te-learn-categories button {flex:0 0 auto;white-space:nowrap;padding:8px 13px;border:1px solid var(--lp-border);border-radius:99px;color:var(--lp-muted);background:rgba(255,255,255,.025);font-size:11px;transition:.16s}
+.te-learn-categories button.active {color:var(--lp-ink);background:rgba(167,78,241,.23);border-color:rgba(205,134,255,.6)}
+.te-learn-course-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;align-items:stretch}
+.te-learn-course {min-width:0;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--lp-border);background:linear-gradient(180deg,rgba(37,23,57,.93),rgba(25,15,43,.95));border-radius:19px;transition:transform .17s ease,border-color .17s ease,box-shadow .17s ease}
+.te-learn-course:hover {transform:translateY(-3px);border-color:rgba(207,146,255,.54);box-shadow:0 14px 36px rgba(14,3,27,.23)}
+.te-learn-logo {min-height:84px;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px solid rgba(255,255,255,.07);font-size:16px;font-weight:850;letter-spacing:.01em;direction:ltr}
+.te-learn-logo-icon {width:49px;height:49px;flex:0 0 49px;background:rgba(255,255,255,.94);border-radius:12px;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.13)}
+.te-learn-logo-icon img {display:block;width:32px;height:32px;object-fit:contain}
+.te-learn-logo--mint {background:linear-gradient(110deg,#122a2d,#19414a);color:#d8ffee}
+.te-learn-logo--red {background:linear-gradient(110deg,#361c34,#662032);color:#ffe5e8}
+.te-learn-logo--cyan {background:linear-gradient(110deg,#102a3b,#11485c);color:#d6f5ff}
+.te-learn-logo--blue {background:linear-gradient(110deg,#0e2c48,#17468b);color:#edf3ff}
+.te-learn-logo--orange {background:linear-gradient(110deg,#332135,#5c3127);color:#fff0dd}
+.te-learn-logo--azure {background:linear-gradient(110deg,#153049,#15517a);color:#e3f5ff}
+.te-learn-logo--gold {background:linear-gradient(110deg,#352539,#5c3c22);color:#ffefcd}
+.te-learn-course-body {display:flex;flex-direction:column;flex:1;padding:17px 17px 16px;gap:10px}
+.te-learn-course-overline {display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px;font-size:11px;color:var(--lp-muted)}
+.te-learn-status {border-radius:99px;padding:4px 8px;font-size:10px;font-weight:850}
+.te-learn-status.cert {color:#94f5d3;background:rgba(13,153,117,.16)}
+.te-learn-status.badge {color:#c9c4ff;background:rgba(109,105,255,.18)}
+.te-learn-status.neutral {color:#f3d7aa;background:rgba(209,150,61,.13)}
+.te-learn-course h3 {font-size:17px;line-height:1.5;font-weight:850;color:var(--lp-ink);margin:1px 0 0;direction:ltr;text-align:right}
+.te-learn-desc {font-size:12.2px;line-height:1.95;color:var(--lp-muted);margin:0;min-height:47px}
+.te-learn-meta {display:flex;flex-wrap:wrap;gap:6px}
+.te-learn-meta span {font-size:10px;line-height:1.5;color:#dac9ed;border:1px solid rgba(196,138,239,.17);background:rgba(255,255,255,.03);border-radius:7px;padding:5px 8px}
+.te-learn-credential {font-size:11px;color:#d3c0e2;line-height:1.8;display:flex;align-items:flex-start;gap:6px;margin:0;border-top:1px solid rgba(203,156,240,.12);padding-top:11px;min-height:56px}
+.te-learn-credential svg {flex:0 0 15px;margin-top:3px;color:#b998e5}
+.te-learn-practice {display:flex;align-items:flex-start;gap:8px;padding:10px;background:rgba(179,98,253,.09);border:1px solid rgba(179,98,253,.13);border-radius:10px;font-size:11px;line-height:1.8;color:#e2c7ff}
+.te-learn-practice svg {flex:0 0 15px;margin-top:2px}
+.te-learn-start {margin-top:auto;min-height:39px;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(158,67,229,.2);border:1px solid rgba(183,109,255,.34);border-radius:11px;font-size:12px;font-weight:800;color:#f8efff;text-decoration:none;transition:background .15s}
+.te-learn-start:hover {background:rgba(160,66,231,.35)}
+.te-learn-trust {display:flex;align-items:flex-start;gap:9px;padding:14px 15px;border-radius:13px;background:rgba(255,255,255,.03);border:1px solid var(--lp-border);color:var(--lp-muted);font-size:11px;line-height:2}
+.te-learn-trust svg {flex:0 0 17px;margin-top:3px;color:#c89afa}
+.te-learn-empty {text-align:center;border:1px dashed var(--lp-border);padding:32px;color:var(--lp-muted);border-radius:15px}
+.te-learn-empty button {border:1px solid var(--lp-border);padding:8px 16px;border-radius:10px;background:rgba(173,85,236,.15);color:var(--lp-ink)}
+.te-learn-laptop {border:1px solid var(--lp-border);background:rgba(37,21,54,.75);border-radius:22px;padding:25px;animation:te-learn-appear .25s ease both}
+.te-learn-laptop-intro {display:flex;align-items:flex-start;gap:14px}
+.te-learn-laptop-intro>svg {color:#b98dff;flex-shrink:0}
+.te-learn-laptop h2 {color:var(--lp-ink);font-size:22px;margin:0 0 5px}
+.te-learn-laptop p {color:var(--lp-muted);font-size:13px;line-height:2;margin:0}
+.te-learn-laptop-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:23px 0}
+.te-learn-laptop-grid article {padding:20px;background:rgba(255,255,255,.035);border:1px solid var(--lp-border);border-radius:16px}
+.te-learn-laptop-grid article svg {color:#cb9bff}
+.te-learn-laptop-grid h3 {font-size:15px;color:var(--lp-ink);margin:10px 0 7px}
+.te-learn-outline-button {display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(195,130,245,.5);background:rgba(146,47,225,.16);border-radius:12px;padding:11px 17px;color:var(--lp-ink);font-size:12px;font-weight:800}
+html[data-theme='light'] .te-learning-page {--lp-ink:#17243e;--lp-muted:#5b6882;--lp-panel:#fff;--lp-border:rgba(103,119,177,.2);--lp-primary:#7a31c4}
+html[data-theme='light'] .te-learning-header {background:radial-gradient(circle at 0% 15%,rgba(195,149,255,.2),transparent 48%),linear-gradient(130deg,#f6f2ff,#edf6ff)}
+html[data-theme='light'] .te-learning-header h1 span {color:#8332c0}
+html[data-theme='light'] .te-learn-eyebrow {color:#8443ba}
+html[data-theme='light'] .te-learning-tabs {background:rgba(238,237,251,.94)}
+html[data-theme='light'] .te-learning-tabs button.active {color:#fff}
+html[data-theme='light'] .te-learn-career {background:linear-gradient(140deg,#f5edff,#edf4ff);border-color:rgba(129,87,198,.28)}
+html[data-theme='light'] .te-learn-career-main p {color:#516078}
+html[data-theme='light'] .te-learn-career-main strong {color:#65418f}
+html[data-theme='light'] .te-learn-career-steps>span {background:rgba(255,255,255,.72);color:#4a3669}
+html[data-theme='light'] .te-learn-career-steps small {color:#625172}
+html[data-theme='light'] .te-learn-filters label {background:#fff}
+html[data-theme='light'] .te-learn-filters select option {background:#fff;color:#222}
+html[data-theme='light'] .te-learn-categories button {background:#fff}
+html[data-theme='light'] .te-learn-categories button.active {color:#632aa0;background:#f1e1ff}
+html[data-theme='light'] .te-learn-course {background:#fff;box-shadow:0 8px 30px rgba(50,45,91,.045)}
+html[data-theme='light'] .te-learn-meta span {color:#59657a;background:#f7f9fe}
+html[data-theme='light'] .te-learn-credential {color:#516078}
+html[data-theme='light'] .te-learn-practice {color:#673e91;background:#f7f0ff}
+html[data-theme='light'] .te-learn-start {color:#712dba;background:#f4e7ff}
+html[data-theme='light'] .te-learn-laptop {background:rgba(248,246,255,.9)}
+html[data-theme='light'] .te-learn-laptop-grid article {background:#fff}
+html[data-theme='light'] .te-learn-outline-button {color:#693c8f}
+@media (max-width:980px){.te-learn-course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.te-learn-career{grid-template-columns:minmax(0,1fr) 250px}}
+@media (max-width:700px){
+ .te-learning-page{padding:12px 0 32px}
+ .te-learning-header{padding:19px 18px;border-radius:18px;margin-bottom:12px}
+ .te-learning-header::after{font-size:60px;left:20px}
+ .te-learning-header h1{font-size:27px}
+ .te-learning-header p{font-size:12px}
+ .te-learning-tabs{gap:4px;margin-bottom:16px;padding:4px;border-radius:13px}
+ .te-learning-tabs button{min-height:47px;font-size:11px;gap:4px;padding:7px 2px;line-height:1.6;flex-direction:column}
+ .te-learning-tabs button svg{width:16px;height:16px}
+ .te-learn-career{grid-template-columns:1fr;padding:20px 17px;gap:13px;border-radius:17px}
+ .te-learn-career h2{font-size:21px}
+ .te-learn-career-main p{font-size:12px}
+ .te-learn-career-steps>span{min-height:61px}
+ .te-learn-courses-heading{align-items:center}
+ .te-learn-courses-heading p{font-size:11px}
+ .te-learn-filters{grid-template-columns:1fr 1fr}
+ .te-learn-search{grid-column:1/-1}
+ .te-learn-filters label{min-height:43px;padding:0 8px;gap:5px}
+ .te-learn-filters :is(input,select){font-size:11px}
+ .te-learn-categories{margin-inline:-1px}
+ .te-learn-course-grid{grid-template-columns:1fr;gap:12px}
+ .te-learn-logo{min-height:75px}
+ .te-learn-desc{min-height:0}
+ .te-learn-credential{min-height:0}
+ .te-learn-laptop{padding:18px}
+ .te-learn-laptop-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.te-learn-courses,.te-learn-laptop{animation:none}.te-learn-course,.te-learning-tabs button{transition:none}}
+
+/* V2: neutral filters, consistent daylight/night colors. Keyboard accessibility preserved. */
+.te-learning-page .te-learn-filters label:has(select) {
+  border-color: transparent;
+  background: rgba(185,165,209,.075);
+  box-shadow: inset 0 0 0 1px rgba(180,160,207,.15);
+}
+.te-learning-page .te-learn-filters label:has(select):focus-within {
+  border-color: transparent;
+  box-shadow: inset 0 0 0 1px rgba(180,160,207,.22);
+}
+.te-learning-page .te-learn-filters select:focus { outline: none; box-shadow: none; }
+.te-learning-page .te-learn-filters select:focus-visible {
+  outline: 2px solid var(--lp-primary); outline-offset: 2px; border-radius: 5px;
+}
+.te-learning-page .te-learn-access {font-size: 11px; line-height:1.8; color:#f1d6ad; margin:0; padding:7px 10px; border-radius:9px; background:rgba(198,139,62,.11)}
+html[data-theme='light'] .te-learning-page .te-learn-access {color:#774e17;background:rgba(246,207,142,.25)}
+html[data-theme='light'] .te-learning-page .te-learn-filters label:has(select) {background:#f5f7fd;box-shadow:inset 0 0 0 1px rgba(101,117,149,.14)}
+html[data-theme='light'] .te-learning-page .te-learn-filters :is(input,select) {color:#17243e}
+html[data-theme='light'] .te-learning-page .te-learn-filters label {color:#6d6487}
+html[data-theme='light'] .te-learning-page .te-learn-status.cert {color:#076546;background:#d6f7e8}
+html[data-theme='light'] .te-learning-page .te-learn-status.badge {color:#4d399d;background:#e9e4ff}
+html[data-theme='light'] .te-learning-page .te-learn-status.neutral {color:#73531c;background:#fcf0da}
+
+/* TECH-ELITE-V3-LEARNING-THEME
+   Precise light/dark styling for the NEW learning paths section only.
+   Do not alter StudentGuide, page geometry, course content, or the rest of the site.
+*/
+
+/* A neutral, visible focus state for filter selects (no purple frame). */
+.te-learning-page .te-learn-filters label:has(select),
+.te-learning-page .te-learn-filters label:has(select):focus-within {
+  border: 1px solid var(--lp-border) !important;
+  box-shadow: none !important;
+}
+.te-learning-page .te-learn-filters select:focus,
+.te-learning-page .te-learn-filters select:focus-visible {
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+.te-learning-page .te-learn-filters label:has(select):focus-within {
+  border-color: #8293b6 !important; /* keyboard focus still has a visible boundary */
+}
+
+/* Light mode: consistently light cards and platform headings. */
+html[data-theme="light"] .te-learning-page {
+  --lp-ink: #152b4e;
+  --lp-muted: #506783;
+  --lp-border: rgba(113, 144, 181, .24);
+}
+html[data-theme="light"] .te-learning-page .te-learn-filters label:has(select) {
+  color: #466080;
+  background: #fff !important;
+  border-color: #d6e1ef !important;
+  box-shadow: none !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-filters label:has(select):focus-within {
+  border-color: #7993b8 !important;
+  box-shadow: none !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-filters :is(input,select) {
+  color: #1b3556 !important;
+  background: transparent !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-course {
+  color: #152b4e;
+  background: #ffffff !important;
+  border-color: #dce6f3 !important;
+  box-shadow: 0 10px 28px rgba(29, 67, 116, .055);
+}
+html[data-theme="light"] .te-learning-page .te-learn-course :is(h3,.te-learn-desc,.te-learn-course-overline) {
+  color: inherit;
+}
+html[data-theme="light"] .te-learning-page .te-learn-desc,
+html[data-theme="light"] .te-learning-page .te-learn-course-overline {
+  color: #536983;
+}
+html[data-theme="light"] .te-learning-page .te-learn-credential { color: #52677f; }
+html[data-theme="light"] .te-learning-page .te-learn-logo {
+  border-bottom-color: rgba(47, 83, 117, .09);
+}
+/* Keep each platform recognizable without carrying the dark-mode gradients into daylight. */
+html[data-theme="light"] .te-learning-page .te-learn-logo--mint   { background: #e1f3ed !important; color: #155744 !important; }
+html[data-theme="light"] .te-learning-page .te-learn-logo--red    { background: #f9e9ec !important; color: #743343 !important; }
+html[data-theme="light"] .te-learning-page .te-learn-logo--cyan   { background: #e2f3fa !important; color: #125572 !important; }
+html[data-theme="light"] .te-learning-page .te-learn-logo--blue   { background: #e8efff !important; color: #244e86 !important; }
+html[data-theme="light"] .te-learning-page .te-learn-logo--orange { background: #fff0e0 !important; color: #85501d !important; }
+html[data-theme="light"] .te-learning-page .te-learn-logo--azure  { background: #e4f2ff !important; color: #225e89 !important; }
+html[data-theme="light"] .te-learning-page .te-learn-logo--gold   { background: #f8f0da !important; color: #795821 !important; }
+html[data-theme="light"] .te-learning-page .te-learn-logo-icon {
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 3px 10px rgba(24, 49, 80, .07);
+}
+html[data-theme="light"] .te-learning-page .te-learn-practice {
+  color: #564182;
+  background: #f5f1fd !important;
+  border-color: #e6d9f8;
+}
+html[data-theme="light"] .te-learning-page .te-learn-start {
+  background: #f1e6ff !important;
+  border-color: #d9c3f4;
+  color: #6725a5 !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-start:hover {
+  background: #e9d8ff !important;
+}
+/* Dark mode remains dark, with no inherited light surfaces. */
+html[data-theme="dark"] .te-learning-page .te-learn-course {
+  background: linear-gradient(180deg, #271939, #1a102c);
+  border-color: rgba(196, 133, 241, .23);
+}
+html[data-theme="dark"] .te-learning-page .te-learn-filters label:has(select) {
+  background: #221632 !important;
+  border-color: #493359 !important;
+  color: #ceb9df;
+}
+html[data-theme="dark"] .te-learning-page .te-learn-filters label:has(select):focus-within {
+  border-color: #9a83b2 !important;
+}
+html[data-theme="dark"] .te-learning-page .te-learn-filters select { color: #f4e8ff; }
+/* END TECH-ELITE-V3-LEARNING-THEME */
