@@ -1,0 +1,86 @@
+/* Only assistant reply content; preserve the site theme and chat geometry. */
+.te-chat-page .te-chat-entry.from-bot .te-chat-content,
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-message-text {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: isolate;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text :is(p, h1, h2, h3, h4, h5, h6, ul, ol, li) {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: isolate;
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text p {
+  white-space: pre-wrap;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text :is(h1, h2, h3, h4, h5, h6) {
+  font-weight: 700;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text > * + *,
+.te-chat-page .te-chat-entry.from-bot .te-chat-content > [role="group"],
+.te-chat-page .te-chat-entry.from-bot .te-chat-content > [role="group"] + .te-chat-message-text {
+  margin-block-start: .75em;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text :is(ul, ol) {
+  padding-block: 0;
+  padding-inline: 1.6em 0;
+  list-style-position: outside;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text ul { list-style-type: disc; }
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text ol { list-style-type: decimal; }
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text li {
+  display: list-item;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text li + li,
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text li > * + * {
+  margin-block-start: .35em;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content :is(bdi, a) {
+  unicode-bidi: isolate;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text a {
+  overflow-wrap: anywhere;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text :is(pre, code) {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+  font-family: monospace;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text code {
+  display: inline-block;
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  vertical-align: baseline;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text pre {
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+  overflow-wrap: normal;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-rich-text pre code {
+  display: block;
+  max-width: none;
+  white-space: inherit;
+  overflow-wrap: normal;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content :is(.te-chat-file-links a, .te-chat-destination, .te-chat-followups button) {
+  direction: rtl;
+  text-align: right;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-link-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.te-chat-page .te-chat-entry.from-bot .te-chat-content .te-chat-file-links a svg {
+  flex-shrink: 0;
+}

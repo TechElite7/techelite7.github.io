@@ -3,4 +3,4 @@
  * انشر ai-worker أولًا ثم ضع الرابط هنا وانشر الموقع.
  * اتركه فارغًا لتفعيل البحث المحلي فقط.
  */
-export const TECH_ELITE_AI_ENDPOINT = 'http://127.0.0.1:8787'
+export const TECH_ELITE_AI_ENDPOINT = 'https://tech-elite-ai-assistant.alawlaqi.workers.dev'
