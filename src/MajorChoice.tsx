@@ -204,20 +204,21 @@ export default function MajorChoice({
               <h3>{QUESTIONS[count].prompt}</h3>
 
               <div className="te-quiz-answer-list">
-                {(["IT", "CS"] as const).map((major) => (
-                  <button
-                    type="button"
-                    key={major}
-                    onClick={() => choose(major)}
-                  >
-                    {/* تم حذف IT / CS من الواجهة */}
-                    <span>
-                      {QUESTIONS[count][major === "IT" ? "it" : "cs"]}
-                    </span>
+                {(count % 2 === 0 ? ["IT", "CS"] : ["CS", "IT"]).map(
+                  (major) => (
+                    <button
+                      type="button"
+                      key={major}
+                      onClick={() => choose(major)}
+                    >
+                      <span>
+                        {QUESTIONS[count][major === "IT" ? "it" : "cs"]}
+                      </span>
 
-                    <ArrowLeft size={17} />
-                  </button>
-                ))}
+                      <ArrowLeft size={17} />
+                    </button>
+                  ),
+                )}
               </div>
 
               {count > 0 && (
