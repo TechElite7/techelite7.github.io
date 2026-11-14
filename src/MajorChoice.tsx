@@ -204,7 +204,7 @@ export default function MajorChoice({
               <h3>{QUESTIONS[count].prompt}</h3>
 
               <div className="te-quiz-answer-list">
-                {(count % 2 === 0 ? ["IT", "CS"] : ["CS", "IT"]).map(
+                {(count % 2 === 0 ? (["IT", "CS"] as const) : (["CS", "IT"] as const)).map(
                   (major) => (
                     <button
                       type="button"
