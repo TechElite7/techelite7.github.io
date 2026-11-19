@@ -13,7 +13,8 @@ import TrackCollections from "./TrackCollections";
 import LearningPathsPage from "./LearningPathsPage";
 import { Instagram } from "lucide-react";
 import CohortIdentity from "./CohortIdentity";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type MouseEvent } from "react";
+import { flushSync } from "react-dom";
 import {
   ArrowLeft,
   ArrowUpLeft,
@@ -283,9 +284,47 @@ function App() {
             <button
               className="theme-toggle"
               type="button"
-              onClick={() =>
-                setTheme((current) => (current === "dark" ? "light" : "dark"))
-              }
+              onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                const nextTheme = theme === "dark" ? "light" : "dark";
+                const doc = document as Document & {
+                  startViewTransition?: (cb: () => void) => { ready: Promise<void> };
+                };
+                if (
+                  !doc.startViewTransition ||
+                  window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                ) {
+                  setTheme(nextTheme);
+                  return;
+                }
+                const rect = event.currentTarget.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+                const endRadius = Math.hypot(
+                  Math.max(x, window.innerWidth - x),
+                  Math.max(y, window.innerHeight - y)
+                );
+                const transition = doc.startViewTransition(() => {
+                  flushSync(() => {
+                    document.documentElement.dataset.theme = nextTheme;
+                    setTheme(nextTheme);
+                  });
+                });
+                transition.ready.then(() => {
+                  document.documentElement.animate(
+                    {
+                      clipPath: [
+                        `circle(0px at ${x}px ${y}px)`,
+                        `circle(${endRadius}px at ${x}px ${y}px)`,
+                      ],
+                    },
+                    {
+                      duration: 550,
+                      easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+                      pseudoElement: "::view-transition-new(root)",
+                    }
+                  );
+                });
+              }}
               title={
                 theme === "dark" ? "تفعيل الوضع النهاري" : "تفعيل الوضع الليلي"
               }

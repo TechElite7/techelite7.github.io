@@ -264,3 +264,72 @@ html[data-theme="dark"] .te-learning-page .te-learn-filters label:has(select):fo
 }
 html[data-theme="dark"] .te-learning-page .te-learn-filters select { color: #f4e8ff; }
 /* END TECH-ELITE-V3-LEARNING-THEME */
+
+
+/* Fix Light Mode overrides on #guide so no dark/purple accents remain stuck in light theme */
+html[data-theme="light"] .te-learning-page {
+  --lp-primary: #0879ee;
+  --lp-glow: rgba(8, 121, 238, 0.16);
+}
+html[data-theme="light"] .te-learning-page .te-learning-header {
+  background: radial-gradient(circle at 0% 15%, rgba(9, 182, 239, 0.14), transparent 48%), linear-gradient(115deg, #ffffff, #eef6ff) !important;
+  border-color: #d8e8fa !important;
+  box-shadow: 0 14px 36px rgba(27, 87, 155, 0.07) !important;
+}
+html[data-theme="light"] .te-learning-page .te-learning-header::after {
+  color: rgba(8, 121, 238, 0.08) !important;
+}
+html[data-theme="light"] .te-learning-page .te-learning-header h1 span,
+html[data-theme="light"] .te-learning-page .te-learn-eyebrow {
+  color: #0879ee !important;
+}
+html[data-theme="light"] .te-learning-page .te-learning-tabs {
+  background: #eaf3ff !important;
+  border-color: #d8e8fa !important;
+}
+html[data-theme="light"] .te-learning-page .te-learning-tabs button.active {
+  background: linear-gradient(112deg, #095df2, #09b6ef) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 8px 22px rgba(9, 93, 242, 0.22) !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-career {
+  background: linear-gradient(140deg, #f3f9ff, #e9f4ff) !important;
+  border-color: #cfe3f8 !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-career-main strong,
+html[data-theme="light"] .te-learning-page .te-learn-career-steps > span svg {
+  color: #0879ee !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-categories button.active {
+  color: #085ec4 !important;
+  background: #e3f1ff !important;
+  border-color: #9dc8f5 !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-practice {
+  color: #1b4d82 !important;
+  background: #eef6ff !important;
+  border-color: #d3e6fb !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-start {
+  color: #085ec4 !important;
+  background: #e6f2ff !important;
+  border-color: #c2dffb !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-start:hover {
+  background: #d6ebff !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-trust,
+html[data-theme="light"] .te-learning-page .te-learn-laptop {
+  background: #f5f9ff !important;
+  border-color: #d8e8fa !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-trust svg,
+html[data-theme="light"] .te-learning-page .te-learn-laptop-intro > svg,
+html[data-theme="light"] .te-learning-page .te-learn-laptop-grid article svg {
+  color: #0879ee !important;
+}
+html[data-theme="light"] .te-learning-page .te-learn-outline-button {
+  color: #085ec4 !important;
+  border-color: #b7d7f7 !important;
+}

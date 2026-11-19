@@ -240,3 +240,17 @@ html[data-theme='light'] .major-detail-toggle{background:#e9f3ff;color:#1267b6;b
 .cs-extra-electives>div{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid rgba(174,115,212,.25);border-radius:11px;padding:12px;background:rgba(45,26,63,.4);color:#eee2f6;text-align:right}.cs-extra-electives>div span{display:grid;gap:5px}.cs-extra-electives>div b{font-size:12px}.cs-extra-electives>div small{font-size:10px;color:#b9a4ce}html[data-theme='light'] .cs-extra-electives>div{background:#fff;border-color:#d0e6fb;color:#183964}html[data-theme='light'] .cs-extra-electives>div small{color:#6685a7}
 /* Higher-contrast open mobile navigation in both themes. */
 @media(max-width:940px){.primary-nav.is-open{background:#160e27;border:1px solid rgba(212,148,244,.42);box-shadow:0 24px 50px rgba(0,0,0,.65);backdrop-filter:blur(20px)}.primary-nav.is-open .nav-link{color:#f9edff}.primary-nav.is-open .nav-link:hover{background:#38204e;color:#fff}.primary-nav.is-open .nav-link.active{color:#fff}html[data-theme='light'] .primary-nav.is-open{background:#d5e7fc;border-color:#97bee9;box-shadow:0 20px 44px rgba(20,67,129,.26)}html[data-theme='light'] .primary-nav.is-open .nav-link{color:#102e59}html[data-theme='light'] .primary-nav.is-open .nav-link:hover{color:#064a98;background:#b9dbfa}html[data-theme='light'] .primary-nav.is-open .nav-link.active{color:#fff}}
+
+
+/* Smooth circular page-reveal transition when switching dark/light theme */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 9999;
+}
