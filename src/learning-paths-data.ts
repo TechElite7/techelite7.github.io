@@ -8,7 +8,7 @@ export type LearningCourse = {
   id: string
   title: string
   provider: string
-  providerKey: 'freecodecamp' | 'cs50' | 'cisco' | 'ibm' | 'aws' | 'microsoft' | 'odin' | 'udemy' | 'coursera'
+  providerKey: 'freecodecamp' | 'cs50' | 'cisco' | 'ibm' | 'aws' | 'microsoft' | 'odin' | 'satr' | 'udemy' | 'coursera'
   category: CourseCategory
   level: CourseLevel
   language: string
@@ -109,27 +109,24 @@ export const learningCourses: LearningCourse[] = [
     url: 'https://skillsbuild.org/ar/digital-credentials', sourceUrl: 'https://skillsbuild.org/ar/digital-credentials',
   },
   {
-    id: 'udemy-python-ar', title: 'بايثون لغير المبرمجين: الأساسيات', provider: 'Udemy', providerKey: 'udemy', category: 'أساسيات البرمجة', level: 'مبتدئ', language: 'العربية', duration: 'ساعة ونصف', credential: 'بدون شهادة',
-    credentialNote: 'الدورة مجانية وقت المراجعة، لكن Udemy لا تصدر شهادة إتمام لدوراتها المجانية.',
-    accessNote: 'الدراسة مجانية؛ بدون شهادة إتمام.',
-    description: 'بداية عملية في المتغيرات والشروط والتكرار بلغة Python دون خبرة سابقة.',
+    id: 'satr-python-101', title: 'Python 101 — أساسيات بايثون', provider: 'منصة سطر', providerKey: 'satr', category: 'أساسيات البرمجة', level: 'مبتدئ', language: 'العربية', duration: 'تعلم ذاتي', credential: 'شهادة مجانية',
+    credentialNote: 'دورة عربية مجانية بالكامل مع شهادة إتمام مجانية من منصة سطر (أكاديمية طويق).',
+    description: 'تعلّم أساسيات لغة Python وتجهيز بيئة العمل والتعامل مع المتغيرات وأنواع البيانات.',
     practice: 'اكتب برنامجًا يحسب الدرجات والمتوسطات من مدخلات المستخدم.',
-    url: 'https://www.udemy.com/course/python-for-non-programmers/', sourceUrl: 'https://www.udemy.com/course/python-for-non-programmers/',
+    url: 'https://satr.tuwaiq.edu.sa/course/rRUQyVDkwQ/view', sourceUrl: 'https://satr.tuwaiq.edu.sa/course/rRUQyVDkwQ/view',
   },
   {
-    id: 'udemy-sql-ar', title: 'أساسيات SQL العملية لمحللي البيانات', provider: 'Udemy', providerKey: 'udemy', category: 'قواعد البيانات', level: 'مبتدئ', language: 'العربية', duration: 'ساعتان', credential: 'بدون شهادة',
-    credentialNote: 'الدورة مجانية وقت المراجعة؛ الدورات المجانية في Udemy لا تمنح شهادة إتمام.',
-    accessNote: 'الدراسة مجانية؛ بدون شهادة إتمام.',
-    description: 'طبّق SELECT وWHERE وGROUP BY وORDER BY على بيانات حقيقية.',
-    practice: 'أنشئ جدول مبيعات بسيطًا واستخرج منه تقارير SQL.',
-    url: 'https://www.udemy.com/course/data_by_mousa_sql_basics/', sourceUrl: 'https://www.udemy.com/course/data_by_mousa_sql_basics/',
+    id: 'cisco-python-1', title: 'Python Essentials 1', provider: 'Cisco Networking Academy', providerKey: 'cisco', category: 'أساسيات البرمجة', level: 'مبتدئ', language: 'الإنجليزية', duration: '30 ساعة', credential: 'شارة رقمية مجانية',
+    credentialNote: 'شارة رقمية مجانية من Cisco عند اجتياز الاختبار النهائي؛ تؤهلك لاختبار PCEP.',
+    description: 'تأسيس برمجي عملي في بايثون وهياكل البيانات والدوال وحل المشكلات الخوارزمية.',
+    practice: 'ابنِ مشروعًا تفاعليًا ببايثون وارفعه على GitHub.',
+    url: 'https://www.netacad.com/courses/python-essentials-1', sourceUrl: 'https://www.netacad.com/courses/python-essentials-1',
   },
   {
-    id: 'coursera-code-yourself-ar', title: 'برمج بنفسك! مقدمة حول البرمجة', provider: 'Coursera', providerKey: 'coursera', category: 'أساسيات البرمجة', level: 'مبتدئ', language: 'العربية', duration: 'نحو 10 ساعات', credential: 'شهادة مدفوعة أو دعم مالي',
-    credentialNote: 'المعاينة مجانية غالبًا؛ إكمال جميع الوحدات والشهادة قد يتطلبان دفعًا أو قبول طلب دعم مالي.',
-    accessNote: 'تنبيه: لا نعدّ هذه دورة مجانية بالكامل. تحقّق من خيار المعاينة قبل التسجيل.',
-    description: 'مبادئ البرمجة والتفكير الحاسوبي بلغة Scratch عبر دورة عربية من جامعة إدنبرة.',
-    practice: 'صمّم لعبة Scratch صغيرة تشرح الحلقات والشروط.',
-    url: 'https://www.coursera.org/learn/intro-programming-ar', sourceUrl: 'https://www.coursera.org/learn/intro-programming-ar',
+    id: 'ms-aspnet-core', title: 'تطوير الويب والخوادم باستخدام ASP.NET Core', provider: 'Microsoft Learn', providerKey: 'microsoft', category: 'تطوير الخوادم', level: 'متوسط', language: 'الإنجليزية', duration: 'تعلم ذاتي', credential: 'إنجاز تعليمي',
+    credentialNote: 'إنجاز رسمي في ملف Microsoft Learn بعد إتمام التقييم؛ مناسب لمسار تطوير البرمجيات.',
+    description: 'مدخل عملي لبناء تطبيقات الويب وواجهات الخوادم باستخدام .NET وC#.',
+    practice: 'أنشئ خدمة API بسيطة تربط بين واجهة ويب وقاعدة بيانات.',
+    url: 'https://learn.microsoft.com/en-us/training/modules/introduction-to-aspnet-core/', sourceUrl: 'https://learn.microsoft.com/en-us/training/modules/introduction-to-aspnet-core/',
   },
 ]

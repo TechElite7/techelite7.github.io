@@ -25,6 +25,7 @@ const platformLook: Record<LearningCourse['providerKey'], { name: string; tone: 
   aws: { name: 'AWS Educate', tone: 'orange', initials: 'AWS', domain: 'aws.amazon.com' },
   microsoft: { name: 'Microsoft Learn', tone: 'azure', initials: 'MS', domain: 'learn.microsoft.com' },
   odin: { name: 'The Odin Project', tone: 'gold', initials: 'ODIN', domain: 'www.theodinproject.com' },
+  satr: { name: 'منصة سطر', tone: 'cyan', initials: 'SATR', domain: 'satr.tuwaiq.edu.sa' },
   udemy: { name: 'Udemy', tone: 'red', initials: 'U', domain: 'www.udemy.com' },
   coursera: { name: 'Coursera', tone: 'blue', initials: 'C', domain: 'www.coursera.org' },
 }
