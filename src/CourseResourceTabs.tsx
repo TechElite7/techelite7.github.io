@@ -5,7 +5,7 @@ import {
 } from 'lucide-react'
 import { siteConfig } from './data'
 import type { Course, Resource } from './data'
-import { getCourseBotUrl, getMaterialBotUrl } from './telegram-links'
+import { getCourseAllMaterialsBotUrl, getCourseBotUrl, getMaterialBotUrl } from './telegram-links'
 import { archiveMessageId, getAllCourseResources } from './telegram-materials'
 
 type TabKey = 'theoryNotes' | 'practicalNotes' | 'notes' | 'exams' | 'summaries' | 'learning' | 'videos' | 'software' | 'practice' | 'bot'
@@ -117,6 +117,24 @@ const visibleTabs = tabs.filter(item =>
           <span className="resource-open-label">{isArchiveFile ? 'استلام PDF من البوت' : telegramLink(res.url) ? 'فتح في تيليجرام' : 'فتح المصدر'} <ExternalLink size={15}/></span>
         </a> : <div key={`${course.id}-${index}`} className="resource-empty">البوت غير مربوط حاليًا لاستلام هذا الملف.</div>
         })}
+        {(() => {
+          const tabHasArchive = visible.some(res => archiveMessageId(res.url) !== null)
+          const allHasArchive = all.some(res => archiveMessageId(res.url) !== null)
+          const tabAllUrl = tabHasArchive ? getCourseAllMaterialsBotUrl(siteConfig.telegramBotUsername, course.id, tab.id === 'theoryNotes' ? 'h' : tab.id === 'practicalNotes' ? 'a' : tab.id === 'notes' ? 'n' : tab.id === 'exams' ? 'x' : tab.id === 'summaries' ? 'u' : undefined) : null
+          const courseAllUrl = allHasArchive ? getCourseAllMaterialsBotUrl(siteConfig.telegramBotUsername, course.id) : null
+          return <>
+            {tabAllUrl && visible.length > 1 && <a href={tabAllUrl} target="_blank" rel="noopener noreferrer" className="resource-send-all">
+              <span className="resource-icon"><Send size={21} /></span>
+              <span className="resource-item-body"><strong>إرسال جميع {tab.label}</strong><small>يرسل البوت جميع ملفات هذا القسم دفعة واحدة في تيليجرام</small></span>
+              <span className="resource-open-label">إرسال الكل <ExternalLink size={15}/></span>
+            </a>}
+            {courseAllUrl && <a href={courseAllUrl} target="_blank" rel="noopener noreferrer" className="resource-send-all">
+              <span className="resource-icon"><Send size={21} /></span>
+              <span className="resource-item-body"><strong>إرسال جميع ملازم المادة</strong><small>يرسل البوت كل الملفات المرفوعة للمادة دفعة واحدة في تيليجرام</small></span>
+              <span className="resource-open-label">إرسال جميع الملازم <ExternalLink size={15}/></span>
+            </a>}
+          </>
+        })()}
       </div>}
     </div>
     <p className="resource-safety-note"><Lightbulb size={16}/> الملازم والنماذج تُربط برسائل الملفات المنشورة بإذن أصحابها. المصادر التعليمية الخارجية مستقلة عن المقررات الرسمية للجامعة.</p>

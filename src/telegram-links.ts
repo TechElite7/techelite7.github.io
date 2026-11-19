@@ -23,3 +23,13 @@ export function getMaterialBotUrl(rawUsername: string, courseId: string, message
   if (payload.length > 64) return null
   return `${base}?start=${encodeURIComponent(payload)}`
 }
+
+/** رابط يفتح البوت ويرسل جميع ملفات الأرشيف للمادة أو لقسم محدد دفعة واحدة. */
+export function getCourseAllMaterialsBotUrl(rawUsername: string, courseId: string, tabKey?: string): string | null {
+  const base = getBotUrl(rawUsername)
+  if (!base || !/^hu-(?:it-\d{2}|cs-\d{3})$/.test(courseId)) return null
+  if (tabKey && !/^[hanxulvpt]$/.test(tabKey)) return null
+  const payload = tabKey ? `all_${courseId}_${tabKey}` : `all_${courseId}`
+  if (payload.length > 64) return null
+  return `${base}?start=${encodeURIComponent(payload)}`
+}

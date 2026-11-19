@@ -9,6 +9,9 @@ import type { SiteConversationState } from './assistant-intent'
 import type { CourseResourceGroup, SmartAnswer } from './smart-academic-search'
 import { streamAnswer, aiFailureMessage } from './assistant-transport'
 import { TECH_ELITE_AI_ENDPOINT } from './tech-elite-ai-config'
+import { siteConfig } from './data'
+import { getCourseAllMaterialsBotUrl } from './telegram-links'
+import { archiveMessageId } from './telegram-materials'
 import { answerAssistant, assistantContext, isSiteQuestion, usableAIEndpoint } from './assistant-router'
 import AcademicScopeControls from './AcademicScopeControls'
 import { DEFAULT_SCOPE, type AcademicScope } from './academic-intent'
@@ -180,6 +183,7 @@ export default function SiteAssistant({ onNavigate }: { onNavigate: (destination
                   <p className="te-chat-message-text"><strong>{assistantInlineText(group.courseName)}</strong><br/><bdi dir="auto">{group.major}</bdi>، المستوى {group.year}، الفصل {group.semester}</p>
                   <div className="te-chat-file-links">
                     {group.resources.map((resource,index) => <a href={resource.url} key={`${resource.sourceUrl}:${index}`} target="_blank" rel="noopener noreferrer"><BookOpen size={15}/><span className="te-chat-link-label">{assistantInlineText(resource.title)}</span><ExternalLink size={13}/></a>)}
+                    {group.resources.length > 1 && group.resources.some(r => archiveMessageId(r.sourceUrl) !== null) && (() => { const allUrl = getCourseAllMaterialsBotUrl(siteConfig.telegramBotUsername, group.courseId); return allUrl ? <a href={allUrl} target="_blank" rel="noopener noreferrer"><Send size={15}/><span className="te-chat-link-label">إرسال جميع الملازم</span><ExternalLink size={13}/></a> : null })()}
                   </div>
                 </div>)}
                 {message.resourceGroups?.some(group => group.resources.length === 0) && <p className="te-chat-message-text">
