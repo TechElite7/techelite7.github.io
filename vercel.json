@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/ai/:path*",
+      "destination": "https://tech-elite-ai-assistant.alawlaqi.workers.dev/:path*"
+    }
+  ]
+}

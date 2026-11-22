@@ -38,7 +38,10 @@ const DAILY_LIMIT = 15
 const STORAGE_CHAT = 'te-academic-chat-v5'
 const STORAGE_LIMIT = 'te-academic-questions-v4'
 const suggestions = ['عرّفني بدفعة Tech Elite', 'اشرح SQL وNoSQL', 'مواد المستوى الثاني IT', 'المحاضرة الأولى تنظيم ومعمارية الحاسب', 'الفرق بين IT وCS', 'كيف أختار تخصصي؟']
-const aiEndpoint = usableAIEndpoint(TECH_ELITE_AI_ENDPOINT.trim(), window.location.hostname)
+const resolvedEndpoint = window.location.hostname.endsWith('.vercel.app')
+  ? `${window.location.origin}/api/ai`
+  : TECH_ELITE_AI_ENDPOINT.trim()
+const aiEndpoint = usableAIEndpoint(resolvedEndpoint, window.location.hostname)
 const aiEnabled = !!aiEndpoint
 const todayKey = () => new Date().toLocaleDateString('en-CA')
 const nextId = () => Date.now() * 1000 + Math.floor(Math.random() * 999)
