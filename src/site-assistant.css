@@ -54,3 +54,5 @@ html[data-theme='light'] .te-chat-composer{box-shadow:0 6px 23px rgba(25,67,123,
 .te-chat-page .te-chat-disclosure{opacity:.85}
 html[data-theme='light'] .te-chat-page .te-chat-composer:focus-within{box-shadow:0 4px 20px rgba(25,67,123,.09)}
 @media(max-width:700px){.te-chat-entry.from-bot p{line-height:2}.te-chat-page .te-chat-disclosure{padding:0 12px}}
+
+.te-chat-thinking{display:inline-flex;align-items:center;gap:8px;padding:8px 2px;color:var(--chat-muted);font-size:13px;font-weight:600}.te-chat-thinking .te-chat-typing{padding:0;margin-inline-start:2px}

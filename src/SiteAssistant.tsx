@@ -66,6 +66,12 @@ export default function SiteAssistant({ onNavigate }: { onNavigate: (destination
   const [query, setQuery] = useState('')
   const [scope, setScope] = useState<AcademicScope>(DEFAULT_SCOPE)
   const [busy, setBusy] = useState(false)
+  const [thinkingStep, setThinkingStep] = useState(0)
+  const thinkingStages = [
+    "جاري البحث في بيانات الموقع...",
+    "جاري تحليل السياق وربط المعلومات...",
+    "جاري صياغة الإجابة الآن...",
+  ]
   const [error, setError] = useState('')
   const boxRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -84,6 +90,11 @@ export default function SiteAssistant({ onNavigate }: { onNavigate: (destination
     return () => { window.removeEventListener('focus', refresh); window.clearInterval(timer) }
   }, [])
   useEffect(() => { if (started) boxRef.current?.scrollTo({ top: boxRef.current.scrollHeight, behavior: 'smooth' }) }, [messages, started, busy])
+  useEffect(() => {
+    if (!busy) { setThinkingStep(0); return }
+    const timer = window.setInterval(() => setThinkingStep(step => (step + 1) % 3), 1800)
+    return () => window.clearInterval(timer)
+  }, [busy])
 
   async function ask(value: string) {
     const question = value.trim()
@@ -179,7 +190,7 @@ export default function SiteAssistant({ onNavigate }: { onNavigate: (destination
             {messages.map(message => <div key={message.id} className={`te-chat-entry ${message.author === 'student' ? 'from-student' : 'from-bot'}`}>
               {message.author === 'assistant' && <div className="te-chat-mini-icon"><Sparkles size={16}/></div>}
               <div className="te-chat-content" dir={message.author === 'assistant' ? 'rtl' : undefined}>
-                {message.text ? (message.author === 'assistant' ? <AssistantMessageText text={message.text}/> : <p className="te-chat-message-text" dir="auto">{message.text}</p>) : <div className="te-chat-typing" role="status" aria-label="المساعد يكتب"><span/><span/><span/></div>}
+                {message.text ? (message.author === 'assistant' ? <AssistantMessageText text={message.text}/> : <p className="te-chat-message-text" dir="auto">{message.text}</p>) : <div className="te-chat-thinking" role="status" aria-live="polite"><LoaderCircle size={15} className="te-spin" /><span>{thinkingStages[thinkingStep]}</span><span className="te-chat-typing" aria-hidden="true"><span/><span/><span/></span></div>}
                 {message.resourceGroups?.filter(group => group.resources.length > 0).map(group => <div
                   key={`${group.major}:${group.courseId}:${group.year}:${group.semester}`}
                   role="group" aria-label={`${group.courseName}، ${group.major}، المستوى ${group.year}، الفصل ${group.semester}`}>
