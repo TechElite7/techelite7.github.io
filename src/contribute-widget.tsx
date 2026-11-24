@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import * as siteData from './data';
 import './contribute-widget.css';
@@ -41,6 +41,7 @@ const KINDS = ['ملزمة نظري', 'ملزمة عملي', 'ملخص', 'نمو
 
 const ContributeWidget: React.FC = () => {
   const allCourses = useMemo(() => extractCourses(), []);
+  const [isLibrary, setIsLibrary] = useState(() => window.location.hash.includes('library'));
   const [open, setOpen] = useState(false);
   const [major, setMajor] = useState<'IT' | 'CS'>('IT');
   const [level, setLevel] = useState<number>(1);
@@ -49,12 +50,20 @@ const ContributeWidget: React.FC = () => {
   const [teacher, setTeacher] = useState('');
   const [reason, setReason] = useState('');
 
+  useEffect(() => {
+    const onHash = () => setIsLibrary(window.location.hash.includes('library'));
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
   const filtered = useMemo(() => {
     const sub = allCourses.filter((c) => c.major.toUpperCase().includes(major) && c.level === level);
     return sub.length > 0 ? sub : allCourses;
   }, [allCourses, major, level]);
 
   const activeCourse = filtered.find((c) => c.id === courseId) || filtered[0];
+
+  if (!isLibrary) return null;
 
   const handleSendToBot = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,13 +75,13 @@ const ContributeWidget: React.FC = () => {
 
   return (
     <>
-      <div className="te-contrib-banner">
+      <div className="te-contrib-banner" style={{ maxWidth: 1120, margin: '16px auto 20px' }}>
         <div className="te-contrib-info">
           <h4>🌱 ساهم في استمرار هذا المرجع للأجيال القادمة</h4>
           <p>لديك ملزمة محدثة، ملخص، أو نموذج اختبار جديد؟ أرسله ليُراجع ويُضاف باسمك للدفعات القادمة.</p>
         </div>
         <button type="button" className="te-contrib-btn" onClick={() => setOpen(true)}>
-          📤 ساهم بملزمة
+          📤 ساهم تحديث الملازم
         </button>
       </div>
 
@@ -80,7 +89,7 @@ const ContributeWidget: React.FC = () => {
         <div className="te-contrib-overlay" onClick={() => setOpen(false)}>
           <form className="te-contrib-modal" onClick={(e) => e.stopPropagation()} onSubmit={handleSendToBot}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-              <strong style={{ fontSize: '1rem' }}>📤 إرسال مساهمة جديدة للمكتبة</strong>
+              <strong style={{ fontSize: '1rem' }}>📤 ساهم تحديث الملازم</strong>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
@@ -169,14 +178,20 @@ function mountContributeWidget() {
   if (typeof document === 'undefined') return;
   const tryMount = () => {
     if (document.getElementById('te-contrib-root')) return;
-    const libSection = document.querySelector('#library, [id*="library"], main');
-    if (!libSection) return;
+    const container = document.querySelector('#library, [id*="library"], main');
+    if (!container) return;
     const host = document.createElement('div');
     host.id = 'te-contrib-root';
-    libSection.appendChild(host);
+    // وضعه في أعلى قسم المكتبة (بعد العنوان التمهيدي مباشرة وقبل بطاقات الاختيار)
+    const firstCardOrGrid = container.querySelector('section, [class*="card"], [class*="grid"]');
+    if (firstCardOrGrid && firstCardOrGrid.parentElement === container) {
+      container.insertBefore(host, firstCardOrGrid);
+    } else {
+      container.prepend(host);
+    }
     createRoot(host).render(<ContributeWidget />);
   };
-  setTimeout(tryMount, 400);
+  setTimeout(tryMount, 300);
   const obs = new MutationObserver(() => tryMount());
   obs.observe(document.body, { childList: true, subtree: true });
 }
