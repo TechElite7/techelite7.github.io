@@ -214,6 +214,7 @@ export const telegramMaterials: Record<string, Resource[]> = {
       url: '',
     },
   ],
+  //مستوى ثاني الترم الاول 
   'hu-it-15': [
     //مادة اللغة الإنجليزية 3 اي تي - م2 ف1
     {
@@ -279,6 +280,26 @@ export const telegramMaterials: Record<string, Resource[]> = {
       kind: 'ملزمة عملي',
       url: 'https://t.me/c/4300869581/17',
     },
+    {
+      title: 'ملخص (oop) -1',
+      kind: 'ملخص',
+      url: 'https://t.me/c/4300869581/48?single',
+    },
+    {
+      title: 'ملخص (oop) -2',
+      kind: 'ملخص',
+      url: 'https://t.me/c/4300869581/49?single',
+    },
+    {
+      title: 'نماذج (oop) -1',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/50?single',
+    },
+    {
+      title: 'نماذج (oop) -2',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/51?single',
+    },
   ],
   'hu-it-17': [
     //مادة أساسيات الاقتصاد اي تي - م2 ف1
@@ -292,6 +313,16 @@ export const telegramMaterials: Record<string, Resource[]> = {
       kind: 'ملزمة نظري',
       url: 'https://t.me/c/4300869581/19?single',
     },
+    {
+      title: 'نماذج اقتصاد - 1',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/34?single',
+    },
+    {
+      title: 'نماذج اقتصاد - 2',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/35?single',
+    },
   ],
   'hu-it-18': [
     //مادة مقدمة في الإحصاء والاحتمالات اي تي - م2 ف1
@@ -300,6 +331,16 @@ export const telegramMaterials: Record<string, Resource[]> = {
       kind: 'ملزمة نظري',
       url: 'https://t.me/c/4300869581/20',
     },
+    {
+      title: 'نماذج احصاء و احتمالات',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/36',
+    },
+    {
+      title: 'ملخص احصاء و احتمالات',
+      kind: 'ملخص',
+      url: 'https://t.me/c/4300869581/37',
+    },
   ],
   'hu-it-19': [
     //مادة الجبر الخطي اي تي - م2 ف1
@@ -307,6 +348,11 @@ export const telegramMaterials: Record<string, Resource[]> = {
       title: 'ملزمة الجبر الخطي',
       kind: 'ملزمة نظري',
       url: 'https://t.me/c/4300869581/21',
+    },
+    {
+      title: 'نماذج الجبر الخطي',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/38',
     },
   ],
   'hu-it-20': [
@@ -325,6 +371,11 @@ export const telegramMaterials: Record<string, Resource[]> = {
       title: 'ملخص عملي تنظيم و معمارية الحاسب',
       kind: 'ملخص',
       url: 'https://t.me/c/4300869581/22',
+    },
+    {
+      title: 'نماذج تنظيم و معمارية الحاسب',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/39',
     },
   ],
   'hu-it-21': [
@@ -374,44 +425,190 @@ export const telegramMaterials: Record<string, Resource[]> = {
       kind: 'ملزمة نظري',
       url: 'https://t.me/c/4300869581/31?single',
     },
+    {
+      title: 'المحاضرة الأولى',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/32?single',
+    },
+    {
+      title: 'المحاضرة الثانية',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/33?single',
+    },
+    {
+      title: 'ملخص هياكل بيانات - 1',
+      kind: 'ملخص',
+      url: 'https://t.me/c/4300869581/43?single',
+    },
+    {
+      title: 'ملخص هياكل بيانات - 2',
+      kind: 'ملخص',
+      url: 'https://t.me/c/4300869581/44?single',
+    },
+    {
+      title: 'ملخص هياكل بيانات - 3',
+      kind: 'ملخص',
+      url: 'https://t.me/c/4300869581/45?single',
+    },
+    {
+      title: 'نماذج هياكل بيانات - 1',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/46?single',
+    },
+    {
+      title: 'نماذج هياكل بيانات - 2',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/47?single',
+    },
+    
   ],
+
+    //مستوى ثاني الترم الثاني 
+    //مستوى ثاني الترم الثاني 
+    //مستوى ثاني الترم الثاني 
   'hu-it-22': [
     //مادة مهارات الاتصال اي تي - م2 ف2
     {
       title: 'المحاضرة الأولى',
       kind: 'ملزمة نظري',
-      url: '',
+      url: 'https://t.me/c/4300869581/53?single',
     },
     {
       title: 'المحاضرة الثانية',
       kind: 'ملزمة نظري',
-      url: '',
+      url: 'https://t.me/c/4300869581/54?single',
     },
+    {
+      title: 'المحاضرة الثالثة',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/55?single',
+    },
+    {
+      title: 'المحاضرة الرابعة',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/56?single',
+    },
+    {
+      title: 'المحاضرة الخامسة',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/57?single',
+    },
+    {
+      title: 'المحاضرة السادسة',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/58?single',
+    },
+    {
+      title: 'المحاضرة السابعة',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/59?single',
+    },
+    {
+      title: 'المحاضرة الثامنة',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/60?single',
+    },
+    {
+      title: 'المحاضرة التاسعة',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/61?single',
+    },
+    {
+      title: 'المحاضرة العاشرة',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/62?single',
+    },
+    {
+      title: 'المحاضرة الحادي عشر',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/52',
+    },
+    {
+      title: 'نماذج مهارات الاتصال - 1',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/63?single',
+    },
+    {
+      title: 'نماذج مهارات الاتصال - 2',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/64?single',
+    },
+    
   ],
   'hu-it-23': [
     //مادة اللغة الإنجليزية 4 اي تي - م2 ف2
-    {
-      title: 'المحاضرة الأولى',
+     {
+      title: 'ملزمة اللغة الإنجليزية',
       kind: 'ملزمة نظري',
-      url: '',
-    },
-    {
-      title: 'المحاضرة الثانية',
-      kind: 'ملزمة نظري',
-      url: '',
+      url: 'https://t.me/c/4300869581/6',
     },
   ],
   'hu-it-24': [
     //مادة أنظمة الويب اي تي - م2 ف2
     {
-      title: 'المحاضرة الأولى',
+      title: 'مقدمة عن المادة',
       kind: 'ملزمة نظري',
-      url: '',
+      url: 'https://t.me/c/4300869581/65?single',
+    },
+    {
+      title: 'المحاضرة الاولى',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/66?single',
     },
     {
       title: 'المحاضرة الثانية',
       kind: 'ملزمة نظري',
-      url: '',
+      url: 'https://t.me/c/4300869581/67?single',
+    },
+    {
+      title: 'المحاضرة الثالثة',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/68?single',
+    },
+    {
+      title: 'المحاضرة الرابعة',
+      kind: 'ملزمة نظري',
+      url: 'https://t.me/c/4300869581/69?single',
+    },
+    {
+      title: 'المحاضرة الاولى',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/70?single',
+    },
+    {
+      title: 'المحاضرة الثانية',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/71?single',
+    },
+    {
+      title: 'المحاضرة الثالثة',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/72?single',
+    },
+    {
+      title: 'المحاضرة الرابعة',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/73?single',
+    },
+    {
+      title: 'المحاضرة الخامسة',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/74?single',
+    },
+    {
+      title: 'المحاضرة السادسة',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/75?single',
+    },
+    {
+      title: 'نماذج  برمجة الويب - 1',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/76?single',
+    },
+    {
+      title: 'نماذج  برمجة الويب - 2',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/77?single',
     },
   ],
   'hu-it-25': [
@@ -419,13 +616,69 @@ export const telegramMaterials: Record<string, Resource[]> = {
     {
       title: 'المحاضرة الأولى',
       kind: 'ملزمة نظري',
-      url: '',
+      url: 'https://t.me/c/4300869581/78?single',
     },
     {
       title: 'المحاضرة الثانية',
       kind: 'ملزمة نظري',
-      url: '',
+      url: 'https://t.me/c/4300869581/79?single',
     },
+    {
+      title: 'المحاضرة الاولى',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/80?single',
+    },
+    {
+      title: 'المحاضرة الثانية',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/81?single',
+    },
+    {
+      title: 'المحاضرة الثالثة',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/82?single',
+    },
+    {
+      title: 'المحاضرة الخامسة',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/83?single',
+    },
+    {
+      title: 'المحاضرة السادسة',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/84?single',
+    },
+    {
+      title: 'المحاضرة السابعة',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/85?single',
+    },
+    {
+      title: 'المحاضرة السابعة + الثامنة',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/86?single',
+    },
+    {
+      title: 'المحاضرة الثامنة',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/87?single',
+    },
+    {
+      title: 'المحاضرة التاسعة',
+      kind: 'ملزمة عملي',
+      url: 'https://t.me/c/4300869581/88?single',
+    },
+    {
+      title: 'نماذج (HCI) - 1',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/89?single',
+    },
+    {
+      title: 'نماذج (HCI) - 2',
+      kind: 'اختبار',
+      url: 'https://t.me/c/4300869581/90?single',
+    },
+   
   ],
   'hu-it-26': [
     //مادة مقدمة في قواعد البيانات اي تي - م2 ف2
