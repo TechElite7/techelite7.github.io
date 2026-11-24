@@ -25,7 +25,7 @@ const after = (q:string,unit:string) => {
 }
 const planWords = (q:string) => /(?:^|\s)(?:مواد|المواد|مقررات|المقررات|خطه|الخطه|خطة|جدول)(?=\s|$)/.test(q)
 const courseMarker = (q:string) => /(?:^|\s)(?:ماده|الماده|مقرر|المقرر)(?=\s|$)/.test(q)
-const resourceWords = (q:string) => /ملزم|ملازم|محاضر|محاضره|ملف|pdf|تحميل|تنزيل|رابط|روابط|سلايد|ملخص|نموذج|امتحان|اختبار/.test(q)
+const resourceWords = (q:string) => /ملزم|ملازم|محاضر|محاضره|ملف|pdf|تحميل|تنزيل|رابط|روابط|سلايد|شرائح|مذكر|ملخص|تلخيص|مراجع|مراجعه|نموذج|نماذج|امتحان|اختبار|اسئله|اسئلة|نهائي|نصفي|ميد|فاينل|كويز|عملي|نظري|تطبيقي|لاب|معمل|مصدر|مصادر|مرجع|فيديو|برنامج|برامج|شروحات|توثيق/.test(q)
 const referenceWords = (q:string) => /فيهن|فيهم|منهن|منهم|ايهن|ايهم|عددهن|عددهم|عددها|حقهم|حقهن|حقها|اعرضها|ارسلها|هاتها|اشرحها|اشرحهن|لها|له|نفسها|نفسه|هذي|هذه|هذولا|ذكرتها|المواد|المقررات|(?:مواد|مقررات)(?:ها|هم|هن)/.test(q)
 export const needsAcademicReasoning = (question:string) => /اشرح|شرح|فسر|فهمني|علمني|وضح|قارن|مقارنه|اصعب|اسهل|افضل|لماذا|ليش/.test(norm(question)) || /كيف/.test(norm(question)) && !resourceWords(norm(question))
 const countWords = (q:string) => /(?:^|\s)(?:كم|عدد|اجمالي|مجموع|احسب|عددها|عددهم|عددهن)(?=\s|$)/.test(q)
@@ -53,7 +53,7 @@ function entities(q:string):Entities {
     semester:allTerms?'ALL':t && t<=2 ? t as Semester : undefined,
     lectureNumber:lecture,
     bareNumber,
-    resourceType:/عملي|تطبيقي/.test(q)?'practical':/نظري/.test(q)?'theory':/ملخص/.test(q)?'summary':/اختبار|امتحان|نموذج/.test(q)?'exam':/محاضر|محاضره/.test(q)?'lecture':/ملزم|ملازم/.test(q)?'notes':/رابط|روابط/.test(q)?'link':undefined,
+    resourceType:/(?:كل|جميع|كافه)\s*(?:ال)?(?:ملفات|المصادر|شي|شيء)/.test(q)?'all':/مصدر|مصادر|مرجع|مراجع|توثيق|فيديو|برنامج|برامج|شروحات/.test(q)?'learning':/عملي|تطبيقي|لاب|معمل/.test(q)?'practical':/نظري/.test(q)?'theory':/ملخص|تلخيص|مراجعه|مراجعات/.test(q)?'summary':/اختبار|امتحان|نموذج|نماذج|اسئله|اسئلة|نهائي|نصفي|ميد|فاينل|كويز/.test(q)?'exam':/محاضر|محاضره/.test(q)?'lecture':/ملزم|ملازم|سلايد|شرائح|مذكر/.test(q)?'notes':/رابط|روابط/.test(q)?'link':undefined,
   }
 }
 export function explicitDialogueSlots(question:string) {
@@ -90,7 +90,7 @@ function withResults(s:State):State {
   return {...s,pendingRequest:undefined,lastResults:{kind:files?'resources':'courses',courses:rows.map(ref),...(resourceCount!==undefined?{resourceCount}:{})}}
 }
 function resourceQuery(s:State):string {
-  const kinds:Record<NonNullable<State['resourceType']>,string>={lecture:'محاضرات',notes:'ملازم',summary:'ملخص',exam:'اختبار',practical:'عملي',theory:'نظري',link:'ملازم'}
+  const kinds:Record<NonNullable<State['resourceType']>,string>={lecture:'نظري',notes:'نظري',summary:'ملخص',exam:'اختبار',practical:'عملي',theory:'نظري',learning:'مصادر تعلم',link:'نظري',all:'كل الملفات'}
   return `${s.resourceType?kinds[s.resourceType]:'ملازم'} ${s.lectureNumber!==undefined?`المحاضرة ${s.lectureNumber}`:''}`
 }
 /** Apply entities to the existing request; clarifications do not become new intents. */
@@ -111,7 +111,7 @@ function transition(question:string, previous:State|null, scope:AcademicScope):{
   const hasSlots=e.major!==undefined || e.level!==undefined || e.semester!==undefined
   const hasCourse=found.matches.length>0 && !explicitPlan
   const isNumber=e.bareNumber!==undefined
-  const follows=!!previous && (hasSlots || isNumber || referenceWords(q) || listWords(q) || (previous.pendingRequest?.missing==='course' && found.hasSubject) || hasCourse)
+  const follows=!!previous && (hasSlots || isNumber || e.resourceType!==undefined || referenceWords(q) || listWords(q) || (previous.pendingRequest?.missing==='course' && found.hasSubject) || hasCourse)
   const starts=explicitPlan || explicitResources || hasCourse || (courseMarker(q) && found.hasSubject) || (e.level!==undefined && /اعرض|عطني|كم|عدد|هات/.test(q))
   if(!starts&&!follows) return {state:null,handled:false}
   let s:State={...(previous||{version:1,...seed(scope),intent:'ListCourses',target:'selection'}),pendingRequest:undefined}
@@ -141,6 +141,7 @@ function transition(question:string, previous:State|null, scope:AcademicScope):{
   if(isNumber && previous?.pendingRequest?.missing==='level' && e.bareNumber!<=4) s.level=e.bareNumber as Level
   else if(isNumber && !priorResource && previous?.semester && e.bareNumber!<=2) s.semester=e.bareNumber as Semester
   if(e.resourceType!==undefined) s.resourceType=e.resourceType
+  else if(hasCourse && explicitResources) s.resourceType='notes'
   if(lectureNumber!==undefined && !pendingChoice) {s.lectureNumber=lectureNumber;s.resourceType=e.resourceType||s.resourceType||'lecture'}
   else if(explicitResources && (!previous?.pendingRequest || allFiles)) s.lectureNumber=undefined
   if(explicitPlan && !explicitResources) {s.lectureNumber=undefined;s.resourceType=undefined}
@@ -192,7 +193,7 @@ function validSnapshot(value:unknown):value is State {
     && (s.lectureNumber===undefined||Number.isInteger(s.lectureNumber)&&s.lectureNumber>0)
     && (s.courseQuery===undefined||typeof s.courseQuery==='string'&&s.courseQuery.length<=350)
     && (s.includeAllCourseMatches===undefined||typeof s.includeAllCourseMatches==='boolean')
-    && (s.resourceType===undefined||['lecture','notes','summary','exam','practical','theory','link'].includes(s.resourceType))
+    && (s.resourceType===undefined||['lecture','notes','summary','exam','practical','theory','learning','link','all'].includes(s.resourceType))
     && (s.course===undefined||reference(s.course)) && (s.courseCandidates===undefined||references(s.courseCandidates))
     && (s.pendingRequest===undefined||!!s.pendingRequest&&typeof s.pendingRequest==='object'&&intents.includes(s.pendingRequest.intent)&&['major','level','course'].includes(s.pendingRequest.missing))
     && (s.lastResults===undefined||!!s.lastResults&&typeof s.lastResults==='object'&&['courses','resources'].includes(s.lastResults.kind)&&references(s.lastResults.courses))
@@ -239,8 +240,65 @@ function answerState(s:State):SmartAnswer {
   const resourceGroups=rows.map(x=>getCourseResourceGroup(x.course,x.major,resourceQuery(s))).sort((a,b)=>Number(b.resources.length>0)-Number(a.resources.length>0))
   const total=resourceGroups.reduce((n,g)=>n+g.resources.length,0)
   if(s.intent==='CountResources')return {text:`عدد الملفات القابلة للفتح في النتائج الحالية: ${total}.`,courseId:rows.length===1?rows[0].course.id:undefined,destination:'library',button:'المكتبة'}
-  if(s.target==='course'&&rows.length===1&&!s.includeAllCourseMatches&&!total)return {text:`وجدت المقرر «${rows[0]?.course.name || s.courseQuery}»، لكن لا توجد ${s.lectureNumber?`المحاضرة رقم ${s.lectureNumber}`:'ملفات من النوع المطلوب'} قابلة للفتح مسجلة له حاليًا.`,courseId:rows.length===1?rows[0].course.id:undefined,destination:'library',button:'المكتبة'}
-  return {text:s.target==='course'?`الملفات المسجلة لمقرر «${rows[0]?.course.name}»:`:`الملازم المسجلة لـ ${rangeLabel(s)}:`,resourceGroups,courseId:rows.length===1?rows[0].course.id:undefined,destination:'library',button:'المكتبة'}
+  const activeType = s.resourceType || 'notes'
+  if(s.target==='course'&&rows.length===1&&!s.includeAllCourseMatches) {
+    const entry = rows[0]
+    const c = entry.course
+    const inv = [
+      { key: 'theory', label: 'ملازم النظري', prompt: 'عطني النظري', count: getCourseResourceGroup(c, entry.major, 'نظري').resources.length },
+      { key: 'practical', label: 'ملازم العملي', prompt: 'عطني العملي', count: getCourseResourceGroup(c, entry.major, 'عملي').resources.length },
+      { key: 'exam', label: 'النماذج والاختبارات', prompt: 'عطني النماذج', count: getCourseResourceGroup(c, entry.major, 'اختبار').resources.length },
+      { key: 'summary', label: 'الملخصات', prompt: 'عطني الملخصات', count: getCourseResourceGroup(c, entry.major, 'ملخص').resources.length },
+      { key: 'learning', label: 'مصادر التعلم', prompt: 'عطني مصادر التعلم', count: getCourseResourceGroup(c, entry.major, 'مصادر تعلم').resources.length },
+    ]
+    const normActive = ['notes','lecture','link','theory'].includes(activeType) ? 'theory' : activeType
+    const availableOthers = inv.filter(x => x.key !== normActive && x.count > 0)
+    if (!total) {
+      let msg = ''
+      if (s.lectureNumber) {
+        msg = `لا توجد المحاضرة رقم ${s.lectureNumber} مسجلة لمقرر «${c.name}» حاليًا.`
+      } else if (normActive === 'practical') {
+        msg = c.hasPractical === false
+          ? `مقرر «${c.name}» مادة نظرية فقط ولا يوجد لها جزء عملي في الخطة الدراسية.`
+          : `مقرر «${c.name}» له جزء عملي، لكن لا توجد ملازم عملي مرفوعة له في المكتبة حاليًا.`
+      } else if (normActive === 'theory') {
+        msg = c.hasTheory === false
+          ? `مقرر «${c.name}» مادة عملية/تطبيقية ولا توجد لها ملازم نظري.`
+          : `لا توجد ملازم نظري مرفوعة لمقرر «${c.name}» في المكتبة حاليًا.`
+      } else if (normActive === 'exam') {
+        msg = `لا توجد نماذج اختبارات مسجلة لمقرر «${c.name}» حاليًا.`
+      } else if (normActive === 'summary') {
+        msg = `لا توجد ملخصات مسجلة لمقرر «${c.name}» حاليًا.`
+      } else if (normActive === 'learning') {
+        msg = `لا توجد مصادر تعلم مسجلة لمقرر «${c.name}» حاليًا.`
+      } else {
+        msg = `لا توجد ملفات مسجلة لمقرر «${c.name}» حاليًا.`
+      }
+      if (availableOthers.length) {
+        msg += `\n\nالمتاح حاليًا لهذه المادة: ${availableOthers.map(x => `${x.label} (${x.count})`).join('، ')}. اختر ما تريده من الأزرار أدناه:`
+      }
+      return {
+        text: msg,
+        followups: availableOthers.length ? availableOthers.map(x => x.prompt) : ['افتح المكتبة'],
+        courseId: c.id,
+        destination: 'library',
+        button: 'المكتبة',
+      }
+    }
+    const typeLabel = normActive==='practical'?'ملازم العملي':normActive==='exam'?'النماذج والاختبارات':normActive==='summary'?'الملخصات':normActive==='learning'?'مصادر التعلم':normActive==='all'?'جميع الملفات والمصادر':'ملازم النظري'
+    const followups = availableOthers.length
+      ? availableOthers.map(x => x.prompt)
+      : inv.filter(x => x.key !== normActive && (x.key !== 'practical' || c.hasPractical !== false)).slice(0, 3).map(x => x.prompt)
+    return {
+      text: `${typeLabel} لمقرر «${c.name}»:`,
+      resourceGroups,
+      followups,
+      courseId: c.id,
+      destination: 'library',
+      button: 'المكتبة',
+    }
+  }
+  return {text:`الملازم المسجلة لـ ${rangeLabel(s)}:`,resourceGroups,courseId:rows.length===1?rows[0].course.id:undefined,destination:'library',button:'المكتبة'}
 }
 export function routeAcademicDialogue(question:string,history:AcademicTurn[],scope:AcademicScope):{answer:SmartAnswer|null;state:State|null} {
   const result=transition(question,reconstructAcademicState(history,scope),scope)

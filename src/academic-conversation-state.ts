@@ -5,6 +5,7 @@ export type Level = 1 | 2 | 3 | 4
 export type Semester = 1 | 2
 export type Range<T> = T | 'ALL'
 export type AcademicIntent = 'ListCourses' | 'CountCourses' | 'GetResources' | 'GetLecture' | 'CountResources' | 'CourseDetails'
+export type ResourceCategoryType = 'lecture' | 'notes' | 'summary' | 'exam' | 'practical' | 'theory' | 'learning' | 'link' | 'all'
 export type CourseReference = { courseId: string; courseName: string; major: Major; year: number; semester: Semester }
 export type AcademicConversationState = {
   version: 1
@@ -18,7 +19,7 @@ export type AcademicConversationState = {
   target: 'selection' | 'course'
   intent: AcademicIntent
   lectureNumber?: number
-  resourceType?: 'lecture' | 'notes' | 'summary' | 'exam' | 'practical' | 'theory' | 'link'
+  resourceType?: ResourceCategoryType
   pendingRequest?: { intent: AcademicIntent; missing: 'major' | 'level' | 'course'; lectureNumber?: number }
   lastResults?: { kind: 'courses' | 'resources'; courses: CourseReference[]; resourceCount?: number }
 }

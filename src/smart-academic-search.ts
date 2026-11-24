@@ -19,6 +19,7 @@ export type CourseResourceGroup = {
   major: 'IT' | 'CS'
   year: number
   semester: 1 | 2
+  tabKey?: 'h' | 'a' | 'x' | 'u'
   resources: { title: string; url: string; sourceUrl: string; kind: Resource['kind'] }[]
 }
 
@@ -81,7 +82,7 @@ const majorFrom = (q: string): Major | undefined => {
   if (/(?:\bit\b|تقنيه\s*المعلومات|تكنولوجيا\s*المعلومات)/.test(q)) return 'IT'
   return undefined
 }
-const wantedResource = (q: string) => /ملزم|محاضر|محاضره|ملازم|ملف|سلايد|مذكر|pdf|نموذج|اختبار|امتحان|ملخص|تنزيل|تحميل|ارسل|ابعث|رابط/.test(q)
+const wantedResource = (q: string) => /ملزم|محاضر|محاضره|ملازم|ملف|سلايد|شرائح|مذكر|pdf|نموذج|نماذج|اختبار|امتحان|ملخص|تلخيص|مراجع|اسئله|اسئلة|عملي|نظري|تطبيقي|لاب|معمل|مصدر|مصادر|فيديو|برنامج|برامج|شروحات|تنزيل|تحميل|ارسل|ابعث|رابط/.test(q)
 const wantsPlan = (q: string) => /(?:مواد|مقررات|الخطة|الخطه|خطة|جدول)/.test(q)
 const wantsCourseDetails = (q: string) => /(?:تفاصيل|معلومات|الساعات|ساعات|كود|رمز|متى|وين|ايش\s*مادة|ايش\s*ماده)/.test(q)
 const isExplanation = (q: string) => /^(?:اشرح|فسر|فهمني|علمني|وضح|ليش|لماذا|كيف\s+يعمل|ما\s*الفرق)/.test(q)
@@ -138,8 +139,13 @@ const requestWords = new Set([
 // Resource nouns can carry a possessive pronoun without naming another course.
 const resourceNouns = new Set([
   'ملزمه', 'ملازم', 'محاضره', 'محاضرات', 'ملف', 'ملفات', 'رابط', 'روابط',
-  'سلايد', 'سلايدات', 'مذكره', 'مذكرات', 'ملخص', 'ملخصات', 'مصدر', 'مصادر',
-  'نموذج', 'نماذج', 'اختبار', 'اختبارات', 'امتحان', 'امتحانات', 'pdf',
+  'سلايد', 'سلايدات', 'شرائح', 'مذكره', 'مذكرات', 'ملخص', 'ملخصات', 'تلخيص', 'تلاخيص',
+  'مراجعه', 'مراجعات', 'مصدر', 'مصادر', 'مرجع', 'مراجع', 'تعلم', 'التعلم', 'توثيق',
+  'فيديو', 'فيديوهات', 'شروحات', 'يوتيوب', 'برنامج', 'برامج',
+  'نموذج', 'نماذج', 'اختبار', 'اختبارات', 'امتحان', 'امتحانات', 'اسئله', 'اسئلة',
+  'نهائي', 'نصفي', 'ميد', 'فاينل', 'كويز', 'سابق', 'سابقه',
+  'نظري', 'عملي', 'تطبيقي', 'تطبيقات', 'لاب', 'لابات', 'معمل', 'معامل',
+  'فيه', 'فيها', 'لها', 'يوجد', 'توجد', 'شي', 'شيء', 'pdf',
 ])
 const isResourceReference = (word: string) => {
   if (resourceNouns.has(word)) return true
@@ -217,11 +223,16 @@ function detectAcademicSubjects(raw: string, constraints: AcademicCourseConstrai
     const score = (direct ? 100 : 0) + hits.reduce((sum, hit) => sum + wordWeight(hit.word) * hit.quality, 0) +
       (hits.length && hits.length === inputWords.length ? 2 : 0)
     return { entry, score, qualifies: qualifies && suffixMatches, direct }
-  }).filter(candidate => candidate.qualifies)
-  if (!candidates.length) return { matches: [], hasSubject, guessed: false }
-  const best = Math.max(...candidates.map(candidate => candidate.score))
+  })
+  let qualified = candidates.filter(candidate => candidate.qualifies)
+  if (!qualified.length) {
+    qualified = candidates.filter(candidate => candidate.score >= 2.2)
+  }
+  const finalCandidates = qualified
+  if (!finalCandidates.length) return { matches: [], hasSubject, guessed: false }
+  const best = Math.max(...finalCandidates.map(candidate => candidate.score))
   // An abbreviated name must retain equally accurate catalog possibilities.
-  const bestMatches = candidates.filter(candidate => Math.abs(candidate.score - best) < 0.000001)
+  const bestMatches = finalCandidates.filter(candidate => Math.abs(candidate.score - best) < 0.000001)
   return { matches: bestMatches.map(candidate => candidate.entry), hasSubject, guessed: !bestMatches.some(candidate => candidate.direct) }
 }
 
@@ -270,14 +281,26 @@ function archiveLink(course: Course, resource: Resource): { title: string; url: 
     return {title: `فتح ${resource.title}`,url:resource.url}
   } catch {return null}
 }
-const isLecture = (r: Resource) => !/وصف رسمي|توثيق رسمي|مسار تعلم|مرجع اضافي/.test(n(r.kind)) && /ملزمه|محاضره|ملخص|نموذج|اختبار|عملي|مذكره|سلايد|ملف|pdf|الشرح/.test(n(r.kind+' '+r.title))
-const typeMatch = (r: Resource,q: string) => {
-  const kind=n(r.kind+' '+r.title)
-  if (/نظري/.test(q)) return /نظري|ملزمه pdf/.test(kind)
-  if (/عملي|تطبيقي/.test(q)) return /عملي|تطبيقي|تطبيق عملي/.test(kind)
-  if (/ملخص/.test(q)) return /ملخص/.test(kind)
-  if (/اختبار|نموذج|امتحان/.test(q)) return /اختبار|امتحان|نموذج/.test(kind)
+const isLearningKind = (r: Resource) => /وصف رسمي|توثيق رسمي|مسار تعلم|مرجع اضافي|فيديو|برنامج/.test(n(r.kind))
+const isLecture = (r: Resource) => !isLearningKind(r) && /ملزمه|ملازم|محاضره|ملخص|تلخيص|نموذج|نماذج|اختبار|امتحان|عملي|تطبيق|مذكره|سلايد|ملف|pdf|الشرح/.test(n(r.kind+' '+r.title))
+const typeMatch = (r: Resource, q: string) => {
+  const kindOnly = n(r.kind)
+  const kind = n(r.kind+' '+r.title)
+  if (/مصادر|تعلم|مرجع|مراجع|توثيق|فيديو|برنامج|برامج/.test(q)) return isLearningKind(r)
+  if (/كل الملفات|جميع الملفات/.test(q)) return isLecture(r) || isLearningKind(r)
+  if (!isLecture(r)) return false
+  if (/نظري/.test(q)) return (/نظري|ملزمه pdf/.test(kindOnly) || (/ملزمه/.test(kindOnly) && !/عملي/.test(kindOnly))) && !/اختبار|امتحان|نموذج|نماذج|ملخص|تلخيص/.test(kind)
+  if (/عملي|تطبيقي|لاب|معمل/.test(q)) return /عملي|تطبيقي|تطبيق عملي|لاب|معمل/.test(kind)
+  if (/ملخص|تلخيص|مراجعه/.test(q)) return /ملخص|تلخيص|مراجعه/.test(kind)
+  if (/اختبار|نموذج|نماذج|امتحان|اسئله|اسئلة/.test(q)) return /اختبار|امتحان|نموذج|نماذج/.test(kind)
   return true
+}
+const detectTabKey = (q: string): CourseResourceGroup['tabKey'] => {
+  if (/عملي|تطبيقي|لاب|معمل/.test(q)) return 'a'
+  if (/اختبار|نموذج|نماذج|امتحان|اسئله|اسئلة/.test(q)) return 'x'
+  if (/ملخص|تلخيص|مراجعه/.test(q)) return 'u'
+  if (/نظري/.test(q)) return 'h'
+  return undefined
 }
 const lectureNum = (q: string) => numberAfter(q,'محاضره|المحاضره|ملزمه|الملزمه|ملف|الملف|سلايد|السلايد')
 const resourceNum = (r: Resource) => lectureNum(n(r.title)) || (n(r.title).match(/\b\d{1,2}\b/)||[])[0] && Number((n(r.title).match(/\b\d{1,2}\b/)||[])[0])
@@ -287,13 +310,13 @@ export function getCourseResourceGroup(course: Course, major: Major, question = 
   const q = n(question)
   const number = lectureNum(q)
   const resources = getAllCourseResources(course)
-    .filter(isLecture).filter(r => typeMatch(r, q))
+    .filter(r => typeMatch(r, q))
     .filter(r => number === undefined || resourceNum(r) === number)
     .flatMap(resource => {
       const link = archiveLink(course, resource)
       return link ? [{title:resource.title, url:link.url, sourceUrl:resource.url, kind:resource.kind}] : []
     })
-  return {courseId:course.id, courseName:course.name, major, year:course.year, semester:course.semester, resources}
+  return {courseId:course.id, courseName:course.name, major, year:course.year, semester:course.semester, tabKey:detectTabKey(q), resources}
 }
 
 function siteNavigation(q: string): SmartAnswer | null {
