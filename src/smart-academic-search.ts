@@ -58,6 +58,7 @@ const arabicDigits = (text: string) => text.replace(/[٠-٩]/g, x => String(x.ch
 const n = (text: string) => normalizeAcademic(arabicDigits(text)).replace(/\b(?:انجليزي|انجليزيه|انقليزي|انجليش|انقلش|انقليش|english)\b/g, 'انجليزي')
   .replace(/\b(?:عربي|عربيه|arabic)\b/g, 'عربي')
   .replace(/\b(?:برمجه|البرمجه|programming)\b/g, 'برمجه')
+  .replace(/برمجه\s+ال?ويب/g, 'انظمه الويب')
 const wordBase = (w: string) => w.replace(/^و(?=.{3})/, '').replace(/^(?:وال|بال|فال|لل)(?=.{3})/, '').replace(/^ال(?=.{3})/, '')
 const stopWords = new Set([
   'جب','لا','بس','طيب','اريده','عطني','اعطني','اعطيني','اريد','ابي','ابغا','ابغي','هات','جيب','ارسل','ارسلي','ابعت','ممكن','لو','سمحت',
@@ -223,12 +224,8 @@ function detectAcademicSubjects(raw: string, constraints: AcademicCourseConstrai
     const score = (direct ? 100 : 0) + hits.reduce((sum, hit) => sum + wordWeight(hit.word) * hit.quality, 0) +
       (hits.length && hits.length === inputWords.length ? 2 : 0)
     return { entry, score, qualifies: qualifies && suffixMatches, direct }
-  })
-  let qualified = candidates.filter(candidate => candidate.qualifies)
-  if (!qualified.length) {
-    qualified = candidates.filter(candidate => candidate.score >= 2.2)
-  }
-  const finalCandidates = qualified
+  }).filter(candidate => candidate.qualifies)
+  const finalCandidates = candidates
   if (!finalCandidates.length) return { matches: [], hasSubject, guessed: false }
   const best = Math.max(...finalCandidates.map(candidate => candidate.score))
   // An abbreviated name must retain equally accurate catalog possibilities.
