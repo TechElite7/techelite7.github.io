@@ -55,10 +55,41 @@ const ordinals: Record<string, number> = {
 }
 const ordinalName = (number: number) => ({1: 'الأول', 2: 'الثاني', 3: 'الثالث', 4: 'الرابع'} as Record<number, string>)[number] || `${number}`
 const arabicDigits = (text: string) => text.replace(/[٠-٩]/g, x => String(x.charCodeAt(0) - 0x660)).replace(/[۰-۹]/g, x => String(x.charCodeAt(0) - 0x6f0))
-const n = (text: string) => normalizeAcademic(arabicDigits(text)).replace(/\b(?:انجليزي|انجليزيه|انقليزي|انجليش|انقلش|انقليش|english)\b/g, 'انجليزي')
+const n = (text: string) => normalizeAcademic(arabicDigits(text))
+  .replace(/\b(?:انجليزي|انجليزيه|انقليزي|انجليش|انقلش|انقليش|english)\b/g, 'انجليزي')
   .replace(/\b(?:عربي|عربيه|arabic)\b/g, 'عربي')
+  .replace(/\b(?:oop|object\s*oriented(?:\s*programming)?)\b|(?:ال?برمجه\s+)?ال?كائنيه(?:\s+ال?توجه)?|كائنيه\s+ال?توجه|ال?برمجه\s+ال?شيئيه/g, 'البرمجه الموجهه للكائنات')
+  .replace(/\b(?:hci|human\s*computer\s*interaction)\b/g, 'تفاعل الانسان والحاسب')
+  .replace(/\b(?:os|operating\s*systems?)\b/g, 'نظم التشغيل')
+  .replace(/\b(?:ds|data\s*structures?)\b/g, 'هياكل البيانات')
+  .replace(/\b(?:db|dbms|databases?)\b/g, 'قواعد البيانات')
+  .replace(/\b(?:coa|computer\s*organization(?:\s*and\s*architecture)?|computer\s*architecture)\b/g, 'تنظيم ومعماريه الحاسب')
+  .replace(/\b(?:swe|software\s*engineering)\b/g, 'هندسه البرمجيات')
+  .replace(/\b(?:web\s*systems?|web\s*programming)\b|برمجه\s+ال?ويب/g, 'انظمه الويب')
+  .replace(/\b(?:computer\s*networks?(?:\s*fundamentals)?|networking)\b/g, 'اساسيات شبكات الحاسب')
+  .replace(/\b(?:computer\s*security)\b/g, 'امن الحاسب')
+  .replace(/\b(?:network\s*security)\b/g, 'امن الشبكات')
+  .replace(/\b(?:artificial\s*intelligence)\b/g, 'الذكاء الاصطناعي')
+  .replace(/\b(?:discrete\s*structures?|discrete\s*math(?:ematics)?)\b/g, 'هياكل متقطعه')
+  .replace(/\b(?:linear\s*algebra)\b/g, 'الجبر الخطي')
+  .replace(/\b(?:differential\s*calculus)\b/g, 'حساب التفاضل')
+  .replace(/\b(?:integral\s*calculus)\b/g, 'حساب التكامل')
+  .replace(/\b(?:visual\s*programming)\b|فيجوال/g, 'البرمجه المرئيه')
+  .replace(/\b(?:mobile\s*app(?:lication)?\s*development)\b/g, 'تطوير تطبيقات الموبايل')
+  .replace(/\b(?:statistics(?:\s*and\s*probability)?|probability)\b/g, 'الاحصاء والاحتمالات')
+  .replace(/\b(?:economics(?:\s*fundamentals)?)\b/g, 'اساسيات الاقتصاد')
+  .replace(/\b(?:general\s*physics|physics)\b/g, 'فيزياء عامه')
+  .replace(/\b(?:algorithms?)\b/g, 'الخوارزميات')
+  .replace(/\b(?:compilers?)\b/g, 'المترجمات')
+  .replace(/\b(?:wireless\s*networks?)\b/g, 'الشبكات اللاسلكيه')
+  .replace(/\b(?:routing\s*(?:and\s*)?switching)\b/g, 'التوجيه والتحويل')
+  .replace(/\b(?:project\s*management)\b/g, 'اداره المشاريع')
+  .replace(/\b(?:technical\s*support)\b/g, 'الدعم الفني')
+  .replace(/\b(?:technical\s*writing)\b/g, 'الكتابه الفنيه')
+  .replace(/\b(?:e\s*commerce)\b/g, 'التجاره الالكترونيه')
+  .replace(/\b(?:communication\s*skills)\b/g, 'مهارات الاتصال')
+  .replace(/\b(?:professional\s*ethics|ethics)\b/g, 'اخلاقيات المهنه')
   .replace(/\b(?:برمجه|البرمجه|programming)\b/g, 'برمجه')
-  .replace(/برمجه\s+ال?ويب/g, 'انظمه الويب')
 const wordBase = (w: string) => w.replace(/^و(?=.{3})/, '').replace(/^(?:وال|بال|فال|لل)(?=.{3})/, '').replace(/^ال(?=.{3})/, '')
 const stopWords = new Set([
   'جب','لا','بس','طيب','اريده','عطني','اعطني','اعطيني','اريد','ابي','ابغا','ابغي','هات','جيب','ارسل','ارسلي','ابعت','ممكن','لو','سمحت',
@@ -209,8 +240,9 @@ function detectAcademicSubjects(raw: string, constraints: AcademicCourseConstrai
   }
   const candidates = scoped.map(entry => {
     const name = normalizedCourse(entry)
-    const words = [...new Set(topicWords(name))]
-    const direct = (' ' + q + ' ').includes(' ' + name + ' ')
+    const eng = normalizeAcademic(entry.course.english || '')
+    const words = [...new Set([...topicWords(name), ...eng.split(' ').filter(w => w.length >= 3)])]
+    const direct = (' ' + q + ' ').includes(' ' + name + ' ') || (eng.length >= 5 && (' ' + q + ' ').includes(' ' + eng + ' '))
     const hits = inputWords.flatMap(word => {
       const exact = words.find(courseWord => word === courseWord)
       const matched = exact || words.find(courseWord => closeWord(word, courseWord))
