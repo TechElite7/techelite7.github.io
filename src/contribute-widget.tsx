@@ -1,112 +1,56 @@
 ﻿import React, { useState, useMemo, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import * as siteData from './data';
+import { courses as itCourses } from './data';
+import { csPlanCourses } from './cs-plan-data';
 import './contribute-widget.css';
+
+const BOT_API_BASE = 'https://tech-elite-telegram-bot.husseinthebetter.workers.dev';
 
 interface CourseOption {
   id: string;
   name: string;
-  major: string;
+  major: 'IT' | 'CS';
   level: number;
   semesterLabel: string;
 }
 
-function normalizeSemester(raw: unknown, idHint: string, keyHint: string): string {
-  const combined = `${String(raw ?? '')} ${idHint} ${keyHint}`.toLowerCase();
-  if (
-    combined.includes('ثاني') ||
-    combined.includes('second') ||
-    combined.includes('sem2') ||
-    combined.includes('s2') ||
-    combined.includes('t2') ||
-    /[-_]2[-_]/.test(idHint)
-  ) {
-    return 'الفصل الثاني';
-  }
-  if (
-    combined.includes('أول') ||
-    combined.includes('اول') ||
-    combined.includes('first') ||
-    combined.includes('sem1') ||
-    combined.includes('s1') ||
-    combined.includes('t1') ||
-    /[-_]1[-_]/.test(idHint)
-  ) {
-    return 'الفصل الأول';
-  }
-  return '';
+interface ApprovedItem {
+  title: string;
+  kind: string;
+  url: string;
+  teacher?: string;
+  reason?: string;
+  contributor?: string;
+  approvedAt?: string;
 }
 
-function extractCourses(): CourseOption[] {
-  const list: CourseOption[] = [];
-  const seen = new Set<string>();
+function buildCourseOptions(): CourseOption[] {
+  const rawAll = [
+    ...(Array.isArray(itCourses) ? itCourses.map((c) => ({ ...c, _major: 'IT' as const })) : []),
+    ...(Array.isArray(csPlanCourses) ? csPlanCourses.map((c) => ({ ...c, _major: 'CS' as const })) : []),
+  ];
 
-  const walk = (obj: unknown, majorHint = '', levelHint = 0, semHint = '') => {
-    if (!obj || typeof obj !== 'object') return;
-    if (Array.isArray(obj)) {
-      obj.forEach((item) => walk(item, majorHint, levelHint, semHint));
-      return;
-    }
+  return rawAll.map((c: Record<string, unknown>) => {
+    const id = String(c.id || '');
+    const name = String(c.name || '').trim();
+    const major: 'IT' | 'CS' = id.startsWith('hu-cs-') || c._major === 'CS' ? 'CS' : 'IT';
+    const level = Number(c.level || c.year || 1);
+    const semRaw = String(c.semester ?? c.term ?? '');
+    const semesterLabel =
+      semRaw === '2' || semRaw.includes('ثاني') || semRaw.toLowerCase().includes('second')
+        ? 'الفصل الثاني'
+        : semRaw === '1' || semRaw.includes('أول') || semRaw.includes('اول') || semRaw.toLowerCase().includes('first')
+        ? 'الفصل الأول'
+        : '';
 
-    const rec = obj as Record<string, unknown>;
-
-    // تحديد التخصص من الحقول المحتملة
-    const rawMajor = String(rec.major ?? rec.track ?? rec.department ?? rec.specialization ?? majorHint).toUpperCase();
-    const detectedMajor = rawMajor.includes('CS') ? 'CS' : rawMajor.includes('IT') ? 'IT' : majorHint;
-
-    // تحديد المستوى من الحقول المحتملة
-    const rawLevel = rec.level ?? rec.year ?? rec.stage ?? levelHint;
-    const numLevel = typeof rawLevel === 'number' ? rawLevel : Number(String(rawLevel).match(/[1-4]/)?.[0] || 0);
-    const detectedLevel = numLevel >= 1 && numLevel <= 4 ? numLevel : levelHint;
-
-    // تحديد الفصل الدراسي من الحقول المحتملة
-    const rawSem = rec.semester ?? rec.term ?? rec.period ?? semHint;
-    const detectedSem = normalizeSemester(rawSem, typeof rec.id === 'string' ? rec.id : '', '');
-
-    if (typeof rec.id === 'string' && typeof rec.name === 'string') {
-      const idUpper = rec.id.toUpperCase();
-      const finalMajor = detectedMajor || (idUpper.includes('CS') ? 'CS' : idUpper.includes('IT') ? 'IT' : 'IT');
-      const idLvl = Number(rec.id.match(/(?:it|cs|level|lvl|y)[-_]?([1-4])/i)?.[1] || 0);
-      const finalLevel = detectedLevel || (idLvl >= 1 && idLvl <= 4 ? idLvl : 1);
-      const finalSem = detectedSem || normalizeSemester('', rec.id, '');
-      const uniqueKey = `${finalMajor}_${finalLevel}_${rec.id}`;
-
-      if (!seen.has(uniqueKey)) {
-        seen.add(uniqueKey);
-        list.push({
-          id: rec.id,
-          name: rec.name.trim(),
-          major: finalMajor,
-          level: finalLevel,
-          semesterLabel: finalSem,
-        });
-      }
-    }
-
-    Object.entries(rec).forEach(([k, v]) => {
-      const kUpper = k.toUpperCase();
-      const nextMajor = kUpper === 'CS' || kUpper.startsWith('CS_') || kUpper.endsWith('_CS')
-        ? 'CS'
-        : kUpper === 'IT' || kUpper.startsWith('IT_') || kUpper.endsWith('_IT')
-        ? 'IT'
-        : detectedMajor;
-
-      const kLvl = Number(k.match(/(?:level|lvl|year|y|مستوى)[-_]?([1-4])/i)?.[1] || 0);
-      const nextLevel = kLvl >= 1 && kLvl <= 4 ? kLvl : detectedLevel;
-      const nextSem = normalizeSemester(k, '', k) || detectedSem;
-
-      walk(v, nextMajor, nextLevel, nextSem);
-    });
-  };
-
-  walk(siteData);
-  return list;
+    return { id, name, major, level, semesterLabel };
+  });
 }
 
 const KINDS = ['ملزمة نظري', 'ملزمة عملي', 'ملخص', 'نموذج', 'ملزمة مترجمة'];
 
 const ContributeWidget: React.FC = () => {
-  const allCourses = useMemo(() => extractCourses(), []);
+  const allCourses = useMemo(() => buildCourseOptions(), []);
   const [isLibrary, setIsLibrary] = useState(() => window.location.hash.includes('library'));
   const [open, setOpen] = useState(false);
   const [major, setMajor] = useState<'IT' | 'CS'>('IT');
@@ -115,11 +59,27 @@ const ContributeWidget: React.FC = () => {
   const [kind, setKind] = useState<string>(KINDS[0]);
   const [teacher, setTeacher] = useState('');
   const [reason, setReason] = useState('');
+  const [approvedMap, setApprovedMap] = useState<Record<string, ApprovedItem[]>>({});
 
   useEffect(() => {
     const onHash = () => setIsLibrary(window.location.hash.includes('library'));
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    fetch(`${BOT_API_BASE}/api/materials`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (active && data?.ok && data.materials && typeof data.materials === 'object') {
+          setApprovedMap(data.materials);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
   }, []);
 
   const filtered = useMemo(() => {
@@ -128,19 +88,41 @@ const ContributeWidget: React.FC = () => {
 
   const activeCourse = filtered.find((c) => c.id === courseId) || filtered[0];
 
+  const recentApproved = useMemo(() => {
+    const entries: Array<{ courseName: string; courseId: string; item: ApprovedItem }> = [];
+    Object.entries(approvedMap).forEach(([cId, items]) => {
+      if (!Array.isArray(items)) return;
+      const cName = allCourses.find((c) => c.id === cId)?.name || cId;
+      items.forEach((item) => entries.push({ courseName: cName, courseId: cId, item }));
+    });
+    return entries.reverse();
+  }, [approvedMap, allCourses]);
+
   if (!isLibrary) return null;
 
   const handleSendToBot = (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeCourse || !teacher.trim() || !reason.trim()) return;
-    const botUrl = `https://t.me/TechEliteHUBot?start=add_${encodeURIComponent(activeCourse.id)}`;
-    window.open(botUrl, '_blank', 'noopener,noreferrer');
+
+    const rawJson = JSON.stringify({
+      c: activeCourse.id,
+      k: kind,
+      t: teacher.trim(),
+      r: reason.trim(),
+    });
+    const bytes = new TextEncoder().encode(rawJson);
+    let bin = '';
+    bytes.forEach((b) => (bin += String.fromCharCode(b)));
+    const b64url = btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+    const startParam = b64url.length <= 60 ? `c_${b64url}` : `add_${activeCourse.id}`;
+    window.open(`https://t.me/TechEliteHUBot?start=${startParam}`, '_blank', 'noopener,noreferrer');
     setOpen(false);
   };
 
   return (
     <>
-      <div className="te-contrib-banner" style={{ maxWidth: 1120, margin: '16px auto 20px' }}>
+      <div className="te-contrib-banner" style={{ maxWidth: 1120, margin: '16px auto 14px' }}>
         <div className="te-contrib-info">
           <h4>🌱 ساهم في استمرار هذا المرجع للأجيال القادمة</h4>
           <p>لديك ملزمة محدثة، ملخص، أو نموذج اختبار جديد؟ أرسله ليُراجع ويُضاف باسمك للدفعات القادمة.</p>
@@ -149,6 +131,48 @@ const ContributeWidget: React.FC = () => {
           📤 ساهم تحديث الملازم
         </button>
       </div>
+
+      {recentApproved.length > 0 && (
+        <div
+          style={{
+            maxWidth: 1120,
+            margin: '0 auto 20px',
+            padding: '14px 18px',
+            borderRadius: 14,
+            border: '1px solid rgba(139, 92, 246, 0.25)',
+            background: 'rgba(139, 92, 246, 0.05)',
+          }}
+        >
+          <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: 10 }}>
+            ✨ أحدث الملازم والنماذج المعتمدة من مساهمات الطلاب ({recentApproved.length})
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
+            {recentApproved.map(({ courseName, item }, idx) => (
+              <a
+                key={`${item.url}-${idx}`}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block',
+                  padding: '10px 12px',
+                  borderRadius: 10,
+                  border: '1px solid rgba(139, 92, 246, 0.2)',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  background: 'rgba(255,255,255,0.03)',
+                }}
+              >
+                <div style={{ fontWeight: 700, fontSize: '0.88rem' }}>{courseName}</div>
+                <div style={{ fontSize: '0.82rem', opacity: 0.9, marginTop: 3 }}>{item.title}</div>
+                {item.reason && (
+                  <div style={{ fontSize: '0.76rem', opacity: 0.72, marginTop: 3 }}>📝 {item.reason}</div>
+                )}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
 
       {open && (
         <div className="te-contrib-overlay" onClick={() => setOpen(false)}>
@@ -186,15 +210,11 @@ const ContributeWidget: React.FC = () => {
             <div className="te-contrib-field">
               <label>اختر المادة</label>
               <select value={activeCourse?.id || ''} onChange={(e) => setCourseId(e.target.value)}>
-                {filtered.length === 0 ? (
-                  <option value="">لا توجد مواد مطابقة</option>
-                ) : (
-                  filtered.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.semesterLabel ? `${c.name} - ${c.semesterLabel}` : c.name}
-                    </option>
-                  ))
-                )}
+                {filtered.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.semesterLabel ? `${c.name} - ${c.semesterLabel}` : c.name}
+                  </option>
+                ))}
               </select>
             </div>
 
