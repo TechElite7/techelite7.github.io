@@ -12,3 +12,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 )
 import './student-guide.css'
 import './academic-major.css'
+
+if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(() => {})
+  })
+}

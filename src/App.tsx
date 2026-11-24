@@ -1,4 +1,5 @@
 import MajorChoice from "./MajorChoice";
+import { PwaInstallModal, usePwaInstallPrompt } from "./PwaInstallPrompt";
 import { itTrackDetails } from "./major-details-data";
 import GraduationProjects from "./GraduationProjects";
 import CohortMembers from "./CohortMembers";
@@ -48,6 +49,7 @@ import {
   MessageCircle,
   Bot,
   LucideIcon,
+  Download,
   Sun,
   Moon,
 } from "lucide-react";
@@ -115,10 +117,6 @@ function App() {
     }
   }, [theme]);
   const botUrl = getBotUrl(siteConfig.telegramBotUsername);
-  const logoSrc =
-    theme === "dark"
-      ? "/assets/tech-elite-dark.png"
-      : "/assets/tech-elite-light.png";
   const heroSrc =
     theme === "dark" ? "/assets/student-3d.webp" : "/assets/student-day.webp";
   const [page, setPage] = useState<Page>(() => {
@@ -126,6 +124,7 @@ function App() {
     return validPages.includes(hash) ? hash : "home";
   });
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pwa = usePwaInstallPrompt();
   const [showHomeQuiz, setShowHomeQuiz] = useState(false);
   const [expandedItTrack, setExpandedItTrack] = useState<string | null>(null);
   const [activeCourse, setActiveCourse] = useState<Course | null>(null);
@@ -250,8 +249,13 @@ function App() {
             aria-label="العودة للرئيسية"
           >
             <img
-              className="brand-image"
-              src={logoSrc}
+              className="brand-image te-logo-dark"
+              src="/assets/tech-elite-dark.png"
+              alt="شعار دفعة Tech Elite"
+            />
+            <img
+              className="brand-image te-logo-light"
+              src="/assets/tech-elite-light.png"
               alt="شعار دفعة Tech Elite"
             />
           </button>
@@ -334,6 +338,16 @@ function App() {
             >
               {theme === "dark" ? <Sun size={19} /> : <Moon size={19} />}
             </button>
+            {!pwa.installed && (
+              <button
+                type="button"
+                className="header-bot-link"
+                onClick={() => void pwa.triggerInstall()}
+                title="تثبيت الموقع كتطبيق"
+              >
+                <Download size={16} /> تثبيت التطبيق
+              </button>
+            )}
             {botUrl && (
               <a
                 className="header-bot-link"
@@ -1383,8 +1397,13 @@ function App() {
           <div>
             <div className="footer-brand">
               <img
-                className="footer-logo"
-                src={logoSrc}
+                className="footer-logo te-logo-dark"
+                src="/assets/tech-elite-dark.png"
+                alt="شعار Tech Elite"
+              />
+              <img
+                className="footer-logo te-logo-light"
+                src="/assets/tech-elite-light.png"
                 alt="شعار Tech Elite"
               />
             </div>
@@ -1453,6 +1472,15 @@ function App() {
           </span>
         </div>
       </footer>
+
+      <PwaInstallModal
+        open={pwa.modalOpen}
+        showManualHint={pwa.showManualHint}
+        isIos={pwa.isIos}
+        hasNativePrompt={pwa.hasNativePrompt}
+        onInstall={() => void pwa.triggerInstall()}
+        onClose={pwa.dismissModal}
+      />
 
       {activeCourse && (
         <div
