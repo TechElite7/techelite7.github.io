@@ -19,7 +19,7 @@ export type CourseResourceGroup = {
   major: 'IT' | 'CS'
   year: number
   semester: 1 | 2
-  tabKey?: 'h' | 'a' | 'x' | 'u'
+  tabKey?: 'h' | 'a' | 't' | 'x' | 'u'
   resources: { title: string; url: string; sourceUrl: string; kind: Resource['kind'] }[]
 }
 
@@ -82,7 +82,7 @@ const majorFrom = (q: string): Major | undefined => {
   if (/(?:\bit\b|تقنيه\s*المعلومات|تكنولوجيا\s*المعلومات)/.test(q)) return 'IT'
   return undefined
 }
-const wantedResource = (q: string) => /ملزم|محاضر|محاضره|ملازم|ملف|سلايد|شرائح|مذكر|pdf|نموذج|نماذج|اختبار|امتحان|ملخص|تلخيص|مراجع|اسئله|اسئلة|عملي|نظري|تطبيقي|لاب|معمل|مصدر|مصادر|فيديو|برنامج|برامج|شروحات|تنزيل|تحميل|ارسل|ابعث|رابط/.test(q)
+const wantedResource = (q: string) => /ملزم|محاضر|محاضره|ملازم|ملف|سلايد|شرائح|مذكر|pdf|نموذج|نماذج|اختبار|امتحان|ملخص|تلخيص|مراجع|اسئله|اسئلة|عملي|نظري|مترجم|ترجمه|تطبيقي|لاب|معمل|مصدر|مصادر|فيديو|برنامج|برامج|شروحات|تنزيل|تحميل|ارسل|ابعث|رابط/.test(q)
 const wantsPlan = (q: string) => /(?:مواد|مقررات|الخطة|الخطه|خطة|جدول)/.test(q)
 const wantsCourseDetails = (q: string) => /(?:تفاصيل|معلومات|الساعات|ساعات|كود|رمز|متى|وين|ايش\s*مادة|ايش\s*ماده)/.test(q)
 const isExplanation = (q: string) => /^(?:اشرح|فسر|فهمني|علمني|وضح|ليش|لماذا|كيف\s+يعمل|ما\s*الفرق)/.test(q)
@@ -144,7 +144,7 @@ const resourceNouns = new Set([
   'فيديو', 'فيديوهات', 'شروحات', 'يوتيوب', 'برنامج', 'برامج',
   'نموذج', 'نماذج', 'اختبار', 'اختبارات', 'امتحان', 'امتحانات', 'اسئله', 'اسئلة',
   'نهائي', 'نصفي', 'ميد', 'فاينل', 'كويز', 'سابق', 'سابقه',
-  'نظري', 'عملي', 'تطبيقي', 'تطبيقات', 'لاب', 'لابات', 'معمل', 'معامل',
+  'نظري', 'عملي', 'مترجم', 'مترجمه', 'مترجمات', 'ترجمه', 'تطبيقي', 'تطبيقات', 'لاب', 'لابات', 'معمل', 'معامل',
   'فيه', 'فيها', 'لها', 'يوجد', 'توجد', 'شي', 'شيء', 'pdf',
 ])
 const isResourceReference = (word: string) => {
@@ -289,13 +289,15 @@ const typeMatch = (r: Resource, q: string) => {
   if (/مصادر|تعلم|مرجع|مراجع|توثيق|فيديو|برنامج|برامج/.test(q)) return isLearningKind(r)
   if (/كل الملفات|جميع الملفات/.test(q)) return isLecture(r) || isLearningKind(r)
   if (!isLecture(r)) return false
-  if (/نظري/.test(q)) return (/نظري|ملزمه pdf/.test(kindOnly) || (/ملزمه/.test(kindOnly) && !/عملي/.test(kindOnly))) && !/اختبار|امتحان|نموذج|نماذج|ملخص|تلخيص/.test(kind)
+  if (/مترجم|ترجمه/.test(q)) return /مترجم|ترجمه/.test(kind)
+  if (/نظري/.test(q)) return (/نظري|ملزمه pdf/.test(kindOnly) || (/ملزمه/.test(kindOnly) && !/عملي|مترجم/.test(kindOnly))) && !/اختبار|امتحان|نموذج|نماذج|ملخص|تلخيص|مترجم/.test(kind)
   if (/عملي|تطبيقي|لاب|معمل/.test(q)) return /عملي|تطبيقي|تطبيق عملي|لاب|معمل/.test(kind)
   if (/ملخص|تلخيص|مراجعه/.test(q)) return /ملخص|تلخيص|مراجعه/.test(kind)
   if (/اختبار|نموذج|نماذج|امتحان|اسئله|اسئلة/.test(q)) return /اختبار|امتحان|نموذج|نماذج/.test(kind)
   return true
 }
 const detectTabKey = (q: string): CourseResourceGroup['tabKey'] => {
+  if (/مترجم|ترجمه/.test(q)) return 't'
   if (/عملي|تطبيقي|لاب|معمل/.test(q)) return 'a'
   if (/اختبار|نموذج|نماذج|امتحان|اسئله|اسئلة/.test(q)) return 'x'
   if (/ملخص|تلخيص|مراجعه/.test(q)) return 'u'

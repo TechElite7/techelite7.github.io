@@ -32,7 +32,7 @@ export function isSiteQuestion(question: string, history: AcademicTurn[], scope:
   const q = normalizeAcademic(question)
   if (inferAssistantIntent(question, reconstructSiteState(history))) return true
   if (resolveAcademicCourses(question, { major: scope.major === 'all' ? undefined : scope.major }).matches.length > 0) return true
-  if (/tech\s*elite|تيك\s*(?:اليت|ايليت)|دفعه|دفعتنا|الموقع|موقعكم|طلاب|مندوب|مطور|ملزم|ملازم|محاضر|محاضره|نموذج|نماذج|اختبار|امتحان|ملخص|تلخيص|مراجعه|عملي|نظري|لاب|مصدر|مصادر|مراجع|تيليجرام|تلجرام|مقرر|مقررات|خطه|مسار|مسارات|لابتوب|مشاريع التخرج|\bit\b|\bcs\b|تقنيه المعلومات|علوم الحاسب|علوم الحاسوب/.test(q)) {
+  if (/tech\s*elite|تيك\s*(?:اليت|ايليت)|دفعه|دفعتنا|الموقع|موقعكم|طلاب|مندوب|مطور|ملزم|ملازم|محاضر|محاضره|نموذج|نماذج|اختبار|امتحان|ملخص|تلخيص|مراجعه|عملي|نظري|مترجم|ترجمه|لاب|مصدر|مصادر|مراجع|تيليجرام|تلجرام|مقرر|مقررات|خطه|مسار|مسارات|لابتوب|مشاريع التخرج|\bit\b|\bcs\b|تقنيه المعلومات|علوم الحاسب|علوم الحاسوب/.test(q)) {
     return true
   }
   const lastAssistant = [...history].reverse().find(turn => turn.author === 'assistant')

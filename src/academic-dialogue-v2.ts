@@ -25,7 +25,7 @@ const after = (q:string,unit:string) => {
 }
 const planWords = (q:string) => /(?:^|\s)(?:مواد|المواد|مقررات|المقررات|خطه|الخطه|خطة|جدول)(?=\s|$)/.test(q)
 const courseMarker = (q:string) => /(?:^|\s)(?:ماده|الماده|مقرر|المقرر)(?=\s|$)/.test(q)
-const resourceWords = (q:string) => /ملزم|ملازم|محاضر|محاضره|ملف|pdf|تحميل|تنزيل|رابط|روابط|سلايد|شرائح|مذكر|ملخص|تلخيص|مراجع|مراجعه|نموذج|نماذج|امتحان|اختبار|اسئله|اسئلة|نهائي|نصفي|ميد|فاينل|كويز|عملي|نظري|تطبيقي|لاب|معمل|مصدر|مصادر|مرجع|فيديو|برنامج|برامج|شروحات|توثيق/.test(q)
+const resourceWords = (q:string) => /ملزم|ملازم|محاضر|محاضره|ملف|pdf|تحميل|تنزيل|رابط|روابط|سلايد|شرائح|مذكر|ملخص|تلخيص|مراجع|مراجعه|نموذج|نماذج|امتحان|اختبار|اسئله|اسئلة|نهائي|نصفي|ميد|فاينل|كويز|عملي|نظري|مترجم|ترجمه|تطبيقي|لاب|معمل|مصدر|مصادر|مرجع|فيديو|برنامج|برامج|شروحات|توثيق/.test(q)
 const referenceWords = (q:string) => /فيهن|فيهم|منهن|منهم|ايهن|ايهم|عددهن|عددهم|عددها|حقهم|حقهن|حقها|اعرضها|ارسلها|هاتها|اشرحها|اشرحهن|لها|له|نفسها|نفسه|هذي|هذه|هذولا|ذكرتها|المواد|المقررات|(?:مواد|مقررات)(?:ها|هم|هن)/.test(q)
 export const needsAcademicReasoning = (question:string) => /اشرح|شرح|فسر|فهمني|علمني|وضح|قارن|مقارنه|اصعب|اسهل|افضل|لماذا|ليش/.test(norm(question)) || /كيف/.test(norm(question)) && !resourceWords(norm(question))
 const countWords = (q:string) => /(?:^|\s)(?:كم|عدد|اجمالي|مجموع|احسب|عددها|عددهم|عددهن)(?=\s|$)/.test(q)
@@ -53,7 +53,7 @@ function entities(q:string):Entities {
     semester:allTerms?'ALL':t && t<=2 ? t as Semester : undefined,
     lectureNumber:lecture,
     bareNumber,
-    resourceType:/(?:كل|جميع|كافه)\s*(?:ال)?(?:ملفات|المصادر|شي|شيء)/.test(q)?'all':/مصدر|مصادر|مرجع|مراجع|توثيق|فيديو|برنامج|برامج|شروحات/.test(q)?'learning':/عملي|تطبيقي|لاب|معمل/.test(q)?'practical':/نظري/.test(q)?'theory':/ملخص|تلخيص|مراجعه|مراجعات/.test(q)?'summary':/اختبار|امتحان|نموذج|نماذج|اسئله|اسئلة|نهائي|نصفي|ميد|فاينل|كويز/.test(q)?'exam':/محاضر|محاضره/.test(q)?'lecture':/ملزم|ملازم|سلايد|شرائح|مذكر/.test(q)?'notes':/رابط|روابط/.test(q)?'link':undefined,
+    resourceType:/(?:كل|جميع|كافه)\s*(?:ال)?(?:ملفات|المصادر|شي|شيء)/.test(q)?'all':/مصدر|مصادر|مرجع|مراجع|توثيق|فيديو|برنامج|برامج|شروحات/.test(q)?'learning':/مترجم|ترجمه/.test(q)?'translated':/عملي|تطبيقي|لاب|معمل/.test(q)?'practical':/نظري/.test(q)?'theory':/ملخص|تلخيص|مراجعه|مراجعات/.test(q)?'summary':/اختبار|امتحان|نموذج|نماذج|اسئله|اسئلة|نهائي|نصفي|ميد|فاينل|كويز/.test(q)?'exam':/محاضر|محاضره/.test(q)?'lecture':/ملزم|ملازم|سلايد|شرائح|مذكر/.test(q)?'notes':/رابط|روابط/.test(q)?'link':undefined,
   }
 }
 export function explicitDialogueSlots(question:string) {
@@ -90,7 +90,7 @@ function withResults(s:State):State {
   return {...s,pendingRequest:undefined,lastResults:{kind:files?'resources':'courses',courses:rows.map(ref),...(resourceCount!==undefined?{resourceCount}:{})}}
 }
 function resourceQuery(s:State):string {
-  const kinds:Record<NonNullable<State['resourceType']>,string>={lecture:'نظري',notes:'نظري',summary:'ملخص',exam:'اختبار',practical:'عملي',theory:'نظري',learning:'مصادر تعلم',link:'نظري',all:'كل الملفات'}
+  const kinds:Record<NonNullable<State['resourceType']>,string>={lecture:'نظري',notes:'نظري',summary:'ملخص',exam:'اختبار',practical:'عملي',theory:'نظري',translated:'مترجمه',learning:'مصادر تعلم',link:'نظري',all:'كل الملفات'}
   return `${s.resourceType?kinds[s.resourceType]:'ملازم'} ${s.lectureNumber!==undefined?`المحاضرة ${s.lectureNumber}`:''}`
 }
 /** Apply entities to the existing request; clarifications do not become new intents. */
@@ -193,7 +193,7 @@ function validSnapshot(value:unknown):value is State {
     && (s.lectureNumber===undefined||Number.isInteger(s.lectureNumber)&&s.lectureNumber>0)
     && (s.courseQuery===undefined||typeof s.courseQuery==='string'&&s.courseQuery.length<=350)
     && (s.includeAllCourseMatches===undefined||typeof s.includeAllCourseMatches==='boolean')
-    && (s.resourceType===undefined||['lecture','notes','summary','exam','practical','theory','learning','link','all'].includes(s.resourceType))
+    && (s.resourceType===undefined||['lecture','notes','summary','exam','practical','theory','translated','learning','link','all'].includes(s.resourceType))
     && (s.course===undefined||reference(s.course)) && (s.courseCandidates===undefined||references(s.courseCandidates))
     && (s.pendingRequest===undefined||!!s.pendingRequest&&typeof s.pendingRequest==='object'&&intents.includes(s.pendingRequest.intent)&&['major','level','course'].includes(s.pendingRequest.missing))
     && (s.lastResults===undefined||!!s.lastResults&&typeof s.lastResults==='object'&&['courses','resources'].includes(s.lastResults.kind)&&references(s.lastResults.courses))
@@ -247,6 +247,7 @@ function answerState(s:State):SmartAnswer {
     const inv = [
       { key: 'theory', label: 'ملازم النظري', prompt: 'عطني النظري', count: getCourseResourceGroup(c, entry.major, 'نظري').resources.length },
       { key: 'practical', label: 'ملازم العملي', prompt: 'عطني العملي', count: getCourseResourceGroup(c, entry.major, 'عملي').resources.length },
+      { key: 'translated', label: 'الملازم المترجمة', prompt: 'عطني الملازم المترجمة', count: getCourseResourceGroup(c, entry.major, 'مترجمه').resources.length },
       { key: 'exam', label: 'النماذج والاختبارات', prompt: 'عطني النماذج', count: getCourseResourceGroup(c, entry.major, 'اختبار').resources.length },
       { key: 'summary', label: 'الملخصات', prompt: 'عطني الملخصات', count: getCourseResourceGroup(c, entry.major, 'ملخص').resources.length },
       { key: 'learning', label: 'مصادر التعلم', prompt: 'عطني مصادر التعلم', count: getCourseResourceGroup(c, entry.major, 'مصادر تعلم').resources.length },
@@ -265,6 +266,8 @@ function answerState(s:State):SmartAnswer {
         msg = c.hasTheory === false
           ? `مقرر «${c.name}» مادة عملية/تطبيقية ولا توجد لها ملازم نظري.`
           : `لا توجد ملازم نظري مرفوعة لمقرر «${c.name}» في المكتبة حاليًا.`
+      } else if (normActive === 'translated') {
+        msg = `لا توجد ملازم مترجمة مسجلة لمقرر «${c.name}» حاليًا.`
       } else if (normActive === 'exam') {
         msg = `لا توجد نماذج اختبارات مسجلة لمقرر «${c.name}» حاليًا.`
       } else if (normActive === 'summary') {
@@ -285,7 +288,7 @@ function answerState(s:State):SmartAnswer {
         button: 'المكتبة',
       }
     }
-    const typeLabel = normActive==='practical'?'ملازم العملي':normActive==='exam'?'النماذج والاختبارات':normActive==='summary'?'الملخصات':normActive==='learning'?'مصادر التعلم':normActive==='all'?'جميع الملفات والمصادر':'ملازم النظري'
+    const typeLabel = normActive==='translated'?'الملازم المترجمة':normActive==='practical'?'ملازم العملي':normActive==='exam'?'النماذج والاختبارات':normActive==='summary'?'الملخصات':normActive==='learning'?'مصادر التعلم':normActive==='all'?'جميع الملفات والمصادر':'ملازم النظري'
     const followups = availableOthers.length
       ? availableOthers.map(x => x.prompt)
       : inv.filter(x => x.key !== normActive && (x.key !== 'practical' || c.hasPractical !== false)).slice(0, 3).map(x => x.prompt)

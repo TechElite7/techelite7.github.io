@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import {
-  BookOpen, BookText, Bot, ClipboardCheck, Code2, Download,
-  ExternalLink, FileText, GraduationCap, Lightbulb, Send, Video,
+  BookOpen, BookText, Bot, ClipboardCheck, Code2,
+  ExternalLink, FileText, GraduationCap, Languages, Lightbulb, Send,
 } from 'lucide-react'
 import { siteConfig } from './data'
 import type { Course, Resource } from './data'
 import { getCourseAllMaterialsBotUrl, getCourseBotUrl, getMaterialBotUrl } from './telegram-links'
 import { archiveMessageId, getAllCourseResources } from './telegram-materials'
 
-type TabKey = 'theoryNotes' | 'practicalNotes' | 'notes' | 'exams' | 'summaries' | 'learning' | 'videos' | 'software' | 'practice' | 'bot'
+type TabKey = 'theoryNotes' | 'practicalNotes' | 'translatedNotes' | 'notes' | 'exams' | 'summaries' | 'learning' | 'bot'
 
 const tabs: {
   id: TabKey
@@ -21,10 +21,8 @@ const tabs: {
   { id: 'notes', label: 'ملازم غير مصنفة', kinds: ['ملزمة PDF'], Icon: BookOpen },
   { id: 'exams', label: 'نماذج الاختبارات', kinds: ['اختبار'], Icon: ClipboardCheck },
   { id: 'summaries', label: 'الملخصات', kinds: ['ملخص'], Icon: FileText },
+  { id: 'translatedNotes', label: 'ملازم مترجمة', kinds: ['ملزمة مترجمة'], Icon: Languages },
   { id: 'learning', label: 'مصادر التعلم', kinds: ['مسار تعلم', 'مرجع إضافي', 'توثيق رسمي', 'وصف رسمي للمقرر'], Icon: BookOpen },
-  { id: 'videos', label: 'الفيديوهات', kinds: ['فيديو'], Icon: Video },
-  { id: 'software', label: 'البرامج', kinds: ['برنامج'], Icon: Download },
-  { id: 'practice', label: 'التطبيقات العملية', kinds: ['تطبيق عملي'], Icon: Code2 },
   { id: 'bot', label: 'بوت الدفعة', kinds: [], Icon: Bot },
 ]
 
@@ -34,10 +32,8 @@ const emptyText: Record<Exclude<TabKey, 'bot'>, string> = {
   notes: 'لا توجد ملازم قديمة غير مصنفة لهذه المادة.',
   exams: 'لم تُضف نماذج اختبارات لهذه المادة بعد. ستظهر هنا بعد ربطها برسائل تيليجرام.',
   summaries: 'لم تُضف ملخصات لهذه المادة بعد.',
+  translatedNotes: 'لم تُضف ملازم مترجمة لهذه المادة بعد.',
   learning: 'لا توجد مصادر تعلم مضافة لهذه المادة حتى الآن.',
-  videos: 'لم تُضف شروحات فيديو لهذه المادة بعد.',
-  software: 'لا توجد برامج مرتبطة بهذه المادة حتى الآن.',
-  practice: 'لم تُضف تطبيقات عملية لهذه المادة بعد.',
 }
 
 function telegramLink(url: string): boolean {
@@ -112,28 +108,20 @@ const visibleTabs = tabs.filter(item =>
             : res.url
           return destination ? <a href={destination} target="_blank" rel="noopener noreferrer"
           key={`${course.id}-${res.kind}-${res.url}-${index}`}>
-          <span className="resource-icon">{telegramLink(res.url) ? <Send size={21} /> : selected === 'software' ? <Download size={21} /> : selected === 'videos' ? <Video size={21} /> : selected === 'exams' ? <ClipboardCheck size={21} /> : <FileText size={21} />}</span>
+          <span className="resource-icon">{telegramLink(res.url) ? <Send size={21} /> : selected === 'translatedNotes' ? <Languages size={21} /> : selected === 'exams' ? <ClipboardCheck size={21} /> : <FileText size={21} />}</span>
           <span className="resource-item-body"><strong>{res.title}</strong><small>{res.kind}{res.description ? ` · ${res.description}` : ''}</small></span>
           <span className="resource-open-label">{isArchiveFile ? 'استلام PDF من البوت' : telegramLink(res.url) ? 'فتح في تيليجرام' : 'فتح المصدر'} <ExternalLink size={15}/></span>
         </a> : <div key={`${course.id}-${index}`} className="resource-empty">البوت غير مربوط حاليًا لاستلام هذا الملف.</div>
         })}
         {(() => {
+          const tabKey = tab.id === 'theoryNotes' ? 'h' : tab.id === 'practicalNotes' ? 'a' : tab.id === 'translatedNotes' ? 't' : tab.id === 'notes' ? 'n' : tab.id === 'exams' ? 'x' : tab.id === 'summaries' ? 'u' : undefined
           const tabHasArchive = visible.some(res => archiveMessageId(res.url) !== null)
-          const allHasArchive = all.some(res => archiveMessageId(res.url) !== null)
-          const tabAllUrl = tabHasArchive ? getCourseAllMaterialsBotUrl(siteConfig.telegramBotUsername, course.id, tab.id === 'theoryNotes' ? 'h' : tab.id === 'practicalNotes' ? 'a' : tab.id === 'notes' ? 'n' : tab.id === 'exams' ? 'x' : tab.id === 'summaries' ? 'u' : undefined) : null
-          const courseAllUrl = allHasArchive ? getCourseAllMaterialsBotUrl(siteConfig.telegramBotUsername, course.id) : null
-          return <>
-            {tabAllUrl && visible.length > 1 && <a href={tabAllUrl} target="_blank" rel="noopener noreferrer" className="resource-send-all">
-              <span className="resource-icon"><Send size={21} /></span>
-              <span className="resource-item-body"><strong>إرسال جميع {tab.label}</strong><small>يرسل البوت جميع ملفات هذا القسم دفعة واحدة في تيليجرام</small></span>
-              <span className="resource-open-label">إرسال الكل <ExternalLink size={15}/></span>
-            </a>}
-            {courseAllUrl && <a href={courseAllUrl} target="_blank" rel="noopener noreferrer" className="resource-send-all">
-              <span className="resource-icon"><Send size={21} /></span>
-              <span className="resource-item-body"><strong>إرسال جميع ملازم المادة</strong><small>يرسل البوت كل الملفات المرفوعة للمادة دفعة واحدة في تيليجرام</small></span>
-              <span className="resource-open-label">إرسال جميع الملازم <ExternalLink size={15}/></span>
-            </a>}
-          </>
+          const tabAllUrl = tabKey && tabHasArchive ? getCourseAllMaterialsBotUrl(siteConfig.telegramBotUsername, course.id, tabKey) : null
+          return tabAllUrl && visible.length > 1 ? <a href={tabAllUrl} target="_blank" rel="noopener noreferrer" className="resource-send-all">
+            <span className="resource-icon"><Send size={21} /></span>
+            <span className="resource-item-body"><strong>إرسال جميع {tab.label}</strong><small>يرسل البوت جميع ملفات هذا القسم دفعة واحدة في تيليجرام</small></span>
+            <span className="resource-open-label">إرسال الكل <ExternalLink size={15}/></span>
+          </a> : null
         })()}
       </div>}
     </div>
