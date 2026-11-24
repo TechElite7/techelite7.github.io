@@ -8,31 +8,97 @@ interface CourseOption {
   name: string;
   major: string;
   level: number;
+  semesterLabel: string;
+}
+
+function normalizeSemester(raw: unknown, idHint: string, keyHint: string): string {
+  const combined = `${String(raw ?? '')} ${idHint} ${keyHint}`.toLowerCase();
+  if (
+    combined.includes('ثاني') ||
+    combined.includes('second') ||
+    combined.includes('sem2') ||
+    combined.includes('s2') ||
+    combined.includes('t2') ||
+    /[-_]2[-_]/.test(idHint)
+  ) {
+    return 'الفصل الثاني';
+  }
+  if (
+    combined.includes('أول') ||
+    combined.includes('اول') ||
+    combined.includes('first') ||
+    combined.includes('sem1') ||
+    combined.includes('s1') ||
+    combined.includes('t1') ||
+    /[-_]1[-_]/.test(idHint)
+  ) {
+    return 'الفصل الأول';
+  }
+  return '';
 }
 
 function extractCourses(): CourseOption[] {
   const list: CourseOption[] = [];
   const seen = new Set<string>();
-  const walk = (obj: unknown, majorHint = 'IT', levelHint = 1) => {
+
+  const walk = (obj: unknown, majorHint = '', levelHint = 0, semHint = '') => {
     if (!obj || typeof obj !== 'object') return;
     if (Array.isArray(obj)) {
-      obj.forEach((item) => walk(item, majorHint, levelHint));
+      obj.forEach((item) => walk(item, majorHint, levelHint, semHint));
       return;
     }
+
     const rec = obj as Record<string, unknown>;
-    const nextMajor = typeof rec.major === 'string' ? rec.major : majorHint;
-    const nextLevel = typeof rec.level === 'number' ? rec.level : levelHint;
-    if (typeof rec.id === 'string' && typeof rec.name === 'string' && !seen.has(rec.id)) {
-      seen.add(rec.id);
-      list.push({ id: rec.id, name: rec.name, major: nextMajor, level: nextLevel });
+
+    // تحديد التخصص من الحقول المحتملة
+    const rawMajor = String(rec.major ?? rec.track ?? rec.department ?? rec.specialization ?? majorHint).toUpperCase();
+    const detectedMajor = rawMajor.includes('CS') ? 'CS' : rawMajor.includes('IT') ? 'IT' : majorHint;
+
+    // تحديد المستوى من الحقول المحتملة
+    const rawLevel = rec.level ?? rec.year ?? rec.stage ?? levelHint;
+    const numLevel = typeof rawLevel === 'number' ? rawLevel : Number(String(rawLevel).match(/[1-4]/)?.[0] || 0);
+    const detectedLevel = numLevel >= 1 && numLevel <= 4 ? numLevel : levelHint;
+
+    // تحديد الفصل الدراسي من الحقول المحتملة
+    const rawSem = rec.semester ?? rec.term ?? rec.period ?? semHint;
+    const detectedSem = normalizeSemester(rawSem, typeof rec.id === 'string' ? rec.id : '', '');
+
+    if (typeof rec.id === 'string' && typeof rec.name === 'string') {
+      const idUpper = rec.id.toUpperCase();
+      const finalMajor = detectedMajor || (idUpper.includes('CS') ? 'CS' : idUpper.includes('IT') ? 'IT' : 'IT');
+      const idLvl = Number(rec.id.match(/(?:it|cs|level|lvl|y)[-_]?([1-4])/i)?.[1] || 0);
+      const finalLevel = detectedLevel || (idLvl >= 1 && idLvl <= 4 ? idLvl : 1);
+      const finalSem = detectedSem || normalizeSemester('', rec.id, '');
+      const uniqueKey = `${finalMajor}_${finalLevel}_${rec.id}`;
+
+      if (!seen.has(uniqueKey)) {
+        seen.add(uniqueKey);
+        list.push({
+          id: rec.id,
+          name: rec.name.trim(),
+          major: finalMajor,
+          level: finalLevel,
+          semesterLabel: finalSem,
+        });
+      }
     }
+
     Object.entries(rec).forEach(([k, v]) => {
-      const m = k.toUpperCase().includes('CS') ? 'CS' : k.toUpperCase().includes('IT') ? 'IT' : nextMajor;
-      const lvlMatch = k.match(/[1-4]/);
-      const l = lvlMatch ? Number(lvlMatch[0]) : nextLevel;
-      walk(v, m, l);
+      const kUpper = k.toUpperCase();
+      const nextMajor = kUpper === 'CS' || kUpper.startsWith('CS_') || kUpper.endsWith('_CS')
+        ? 'CS'
+        : kUpper === 'IT' || kUpper.startsWith('IT_') || kUpper.endsWith('_IT')
+        ? 'IT'
+        : detectedMajor;
+
+      const kLvl = Number(k.match(/(?:level|lvl|year|y|مستوى)[-_]?([1-4])/i)?.[1] || 0);
+      const nextLevel = kLvl >= 1 && kLvl <= 4 ? kLvl : detectedLevel;
+      const nextSem = normalizeSemester(k, '', k) || detectedSem;
+
+      walk(v, nextMajor, nextLevel, nextSem);
     });
   };
+
   walk(siteData);
   return list;
 }
@@ -57,8 +123,7 @@ const ContributeWidget: React.FC = () => {
   }, []);
 
   const filtered = useMemo(() => {
-    const sub = allCourses.filter((c) => c.major.toUpperCase().includes(major) && c.level === level);
-    return sub.length > 0 ? sub : allCourses;
+    return allCourses.filter((c) => c.major === major && c.level === level);
   }, [allCourses, major, level]);
 
   const activeCourse = filtered.find((c) => c.id === courseId) || filtered[0];
@@ -119,13 +184,17 @@ const ContributeWidget: React.FC = () => {
             </div>
 
             <div className="te-contrib-field">
-              <label>اختر المادة (مربوطة تلقائياً بالخطة)</label>
+              <label>اختر المادة</label>
               <select value={activeCourse?.id || ''} onChange={(e) => setCourseId(e.target.value)}>
-                {filtered.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name} ({c.id})
-                  </option>
-                ))}
+                {filtered.length === 0 ? (
+                  <option value="">لا توجد مواد مطابقة</option>
+                ) : (
+                  filtered.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.semesterLabel ? `${c.name} - ${c.semesterLabel}` : c.name}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 
@@ -182,7 +251,6 @@ function mountContributeWidget() {
     if (!container) return;
     const host = document.createElement('div');
     host.id = 'te-contrib-root';
-    // وضعه في أعلى قسم المكتبة (بعد العنوان التمهيدي مباشرة وقبل بطاقات الاختيار)
     const firstCardOrGrid = container.querySelector('section, [class*="card"], [class*="grid"]');
     if (firstCardOrGrid && firstCardOrGrid.parentElement === container) {
       container.insertBefore(host, firstCardOrGrid);
