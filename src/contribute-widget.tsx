@@ -233,7 +233,7 @@ function mountContributeWidget() {
 
 mountContributeWidget();
 
-fetch('https://tech-elite-telegram-bot.husseinthebetter.workers.dev/api/materials')
+fetch('/api/materials')
   .then((r) => (r.ok ? r.json() : null))
   .then((data) => {
     if (data?.ok && data.materials) {
@@ -242,3 +242,4 @@ fetch('https://tech-elite-telegram-bot.husseinthebetter.workers.dev/api/material
     }
   })
   .catch(() => {});
+
