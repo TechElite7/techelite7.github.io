@@ -3,6 +3,10 @@
     {
       "source": "/api/ai/:path*",
       "destination": "https://tech-elite-ai-assistant.alawlaqi.workers.dev/:path*"
+    },
+    {
+      "source": "/api/bot/:path*",
+      "destination": "https://tech-elite-telegram-bot.husseinthebetter.workers.dev/api/:path*"
     }
   ]
 }

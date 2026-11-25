@@ -233,7 +233,7 @@ function mountContributeWidget() {
 
 mountContributeWidget();
 
-fetch('/api/materials')
+fetch('/api/bot/materials')
   .then((r) => (r.ok ? r.json() : null))
   .then((data) => {
     if (data?.ok && data.materials) {
@@ -242,4 +242,5 @@ fetch('/api/materials')
     }
   })
   .catch(() => {});
+
 
