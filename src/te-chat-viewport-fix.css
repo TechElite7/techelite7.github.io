@@ -319,3 +319,74 @@ body:has(.primary-nav.is-open) .te-chat-page .te-scope-wrap {
   pointer-events: none !important;
 }
 /* END TECH-ELITE-V3-SCOPE-RIGHT */
+
+/* TE-CHAT-CLEAN-MOBILE-V4: إزالة السكرول المزدوج وتخفيف زحمة الشات وإخفاء زر البلاغات داخله */
+html:has(body.te-chat-viewport-route),
+html body.te-chat-viewport-route {
+  overflow: hidden !important;
+  height: 100dvh !important;
+}
+
+body.te-chat-viewport-route #te-feedback-btn {
+  display: none !important;
+}
+
+body.te-chat-viewport-route #main-content {
+  height: calc(100dvh - var(--te-chat-top-offset, 68px)) !important;
+  max-height: calc(100dvh - var(--te-chat-top-offset, 68px)) !important;
+  overflow: hidden !important;
+}
+
+body.te-chat-viewport-route .te-assistant-only > .te-quiz-spot {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  body.te-chat-viewport-route #main-content {
+    height: calc(100dvh - 64px) !important;
+    max-height: calc(100dvh - 64px) !important;
+  }
+
+  body.te-chat-viewport-route .te-chat-page .te-chat-topbar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+    padding: 4px 2px 6px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  body.te-chat-viewport-route .te-chat-page .te-chat-topbar h1,
+  body.te-chat-viewport-route .te-chat-page .te-chat-topbar h2,
+  body.te-chat-viewport-route .te-chat-page .te-chat-title {
+    font-size: 13.5px !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+  }
+
+  body.te-chat-viewport-route .te-chat-page .te-chat-topbar-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    flex-shrink: 0 !important;
+  }
+
+  body.te-chat-viewport-route .te-chat-page .te-chat-topbar-actions button {
+    padding: 5px 9px !important;
+    font-size: 11.5px !important;
+    border-radius: 10px !important;
+    white-space: nowrap !important;
+    min-height: 30px !important;
+  }
+
+  body.te-chat-viewport-route .te-chat-page .te-chat-fixed-composer {
+    padding: 5px 0 2px !important;
+  }
+
+  body.te-chat-viewport-route .te-chat-page .te-chat-footnote {
+    font-size: 10.5px !important;
+    margin-top: 2px !important;
+  }
+}
+/* END TE-CHAT-CLEAN-MOBILE-V4 */
