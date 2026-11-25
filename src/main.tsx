@@ -1,4 +1,5 @@
-﻿import './contribute-widget';
+import './contribute-widget';
+import './feedback-widget';
 import './scroll-reveal';
 import React from 'react'
 import ReactDOM from 'react-dom/client'
