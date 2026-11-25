@@ -1737,7 +1737,7 @@ export function applyCloudMaterials(
       if (!item?.url || hiddenCloudUrls.has(item.url) || existing.has(item.url)) continue
       telegramMaterials[courseId].push({
         title: item.title,
-        kind: ((item.kind === 'نموذج' ? 'اختبار' : item.kind) || 'ملزمة نظري') as Resource['kind'],
+        kind: ((item.kind === 'handout' || item.kind === 'theory' ? 'ملزمة نظري' : item.kind === 'practical' ? 'ملزمة عملي' : item.kind === 'summary' ? 'ملخص' : item.kind === 'نموذج' || item.kind === 'exam' ? 'اختبار' : item.kind === 'translated' ? 'ملزمة مترجمة' : item.kind) || 'ملزمة نظري') as Resource['kind'],
         url: item.url,
         description: item.reason || '',
       })
@@ -1745,3 +1745,4 @@ export function applyCloudMaterials(
     }
   }
 }
+
