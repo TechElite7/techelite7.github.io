@@ -26,6 +26,19 @@ interface ApprovedItem {
   approvedAt?: string;
 }
 
+function normalizeKind(k: string): string {
+  const s = String(k || '').trim();
+  const map: Record<string, string> = {
+    handout: 'ملزمة نظري',
+    lecture: 'ملزمة نظري',
+    lab: 'ملزمة عملي',
+    summary: 'ملخص',
+    exam: 'نموذج',
+    translated: 'ملزمة مترجمة',
+  };
+  return map[s] || map[s.toLowerCase()] || s || 'ملزمة نظري';
+}
+
 function buildCourseOptions(): CourseOption[] {
   const rawAll = [
     ...(Array.isArray(itCourses) ? itCourses.map((c) => ({ ...c, _major: 'IT' as const })) : []),
@@ -51,8 +64,6 @@ function buildCourseOptions(): CourseOption[] {
 
 const KINDS = ['ملزمة نظري', 'ملزمة عملي', 'ملخص', 'نموذج', 'ملزمة مترجمة'];
 
-
-// حقن الملازم السحابية تلقائياً داخل بيانات المقررات في الذاكرة ليراها الموقع وكأنها جزء أصيل من الكود
 function injectCloudMaterialsIntoCourses(
   materialsMap: Record<string, ApprovedItem[]>,
   hiddenUrls: string[]
@@ -67,7 +78,6 @@ function injectCloudMaterialsIntoCourses(
     const cId = String(course.id || '');
     if (!cId) return;
 
-    // تصفية المخفي من المصادر الأساسية
     if (Array.isArray(course.resources)) {
       course.resources = (course.resources as Array<Record<string, unknown>>).filter(
         (r) => !hiddenSet.has(String(r.url || ''))
@@ -86,9 +96,8 @@ function injectCloudMaterialsIntoCourses(
       .filter((item) => !hiddenSet.has(item.url) && !existingUrls.has(item.url))
       .map((item) => ({
         title: item.title,
-        kind: ({ handout: 'ملزمة نظري', lab: 'ملزمة عملي', summary: 'ملخص', exam: 'نموذج', translated: 'ملزمة مترجمة' }[item.kind] || item.kind || 'ملزمة نظري'),
+        kind: normalizeKind(item.kind),
         url: item.url,
-        rawArchiveUrl: item.url,
         note: item.reason || '',
       }));
 
@@ -122,7 +131,6 @@ const ContributeWidget: React.FC = () => {
       .then((data) => {
         if (data?.ok && data.materials && typeof data.materials === 'object') {
           injectCloudMaterialsIntoCourses(data.materials, Array.isArray(data.hidden) ? data.hidden : []);
-          // إشعار واجهة الموقع بإعادة الرسم بهدوء إن كانت مستمعة
           window.dispatchEvent(new Event('te-materials-updated'));
         }
       })
@@ -289,7 +297,3 @@ function mountContributeWidget() {
 }
 
 mountContributeWidget();
-
-
-
-
