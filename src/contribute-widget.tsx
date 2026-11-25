@@ -51,14 +51,6 @@ function buildCourseOptions(): CourseOption[] {
 
 const KINDS = ['ملزمة نظري', 'ملزمة عملي', 'ملخص', 'نموذج', 'ملزمة مترجمة'];
 
-// تحويل رابط أرشيف تيليجرام إلى رابط فتح مباشر عبر البوت حتى يعمل في الموقع بدون رسالة "البوت غير مربوط"
-function toBotMaterialLink(courseId: string, url: string): string {
-  const m = /\/(\d+)$/.exec(String(url || ''));
-  if (m && courseId) {
-    return `https://t.me/${BOT_USERNAME}?start=m_${courseId}_${m[1]}`;
-  }
-  return url;
-}
 
 // حقن الملازم السحابية تلقائياً داخل بيانات المقررات في الذاكرة ليراها الموقع وكأنها جزء أصيل من الكود
 function injectCloudMaterialsIntoCourses(
@@ -95,7 +87,7 @@ function injectCloudMaterialsIntoCourses(
       .map((item) => ({
         title: item.title,
         kind: item.kind || 'handout',
-        url: toBotMaterialLink(cId, item.url),
+        url: item.url,
         rawArchiveUrl: item.url,
         note: item.reason || '',
       }));
@@ -297,3 +289,5 @@ function mountContributeWidget() {
 }
 
 mountContributeWidget();
+
+
