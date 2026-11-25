@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Tech Elite | روابط الملازم والنماذج التي تحتفظ بها الدفعة في تيليجرام.
  *
  * كل مادة لها id مستقل في src/data.ts. ابحث عن المادة، وخذ قيمة id.
@@ -1719,7 +1719,7 @@ export const telegramMaterials: Record<string, Resource[]> = {
 }
 
 export function getAllCourseResources(course: Course): Resource[] {
-  return [...course.resources, ...(telegramMaterials[course.id] ?? [])].filter((r) => !hiddenCloudUrls.has(r.url))
+  return [...course.resources, ...(telegramMaterials[course.id] ?? [])].filter((r) => Boolean(r.url && r.url.trim()) && !hiddenCloudUrls.has(r.url))
 }
 
 const hiddenCloudUrls = new Set<string>()
