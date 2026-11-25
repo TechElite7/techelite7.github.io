@@ -23,3 +23,14 @@ if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
 }
 
 
+
+// te-hash-stabilizer: تثبيت موضع الصفحة عند الفتح الأول مع وجود #hash
+if (window.location.hash) {
+  const savedHash = window.location.hash;
+  window.addEventListener('load', () => {
+    requestAnimationFrame(() => {
+      const target = document.querySelector(savedHash);
+      if (target) target.scrollIntoView({ behavior: 'auto', block: 'start' });
+    });
+  }, { once: true });
+}
