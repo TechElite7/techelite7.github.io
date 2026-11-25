@@ -59,6 +59,7 @@ const ContributeWidget: React.FC = () => {
   const [kind, setKind] = useState<string>(KINDS[0]);
   const [teacher, setTeacher] = useState('');
   const [reason, setReason] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const [approvedMap, setApprovedMap] = useState<Record<string, ApprovedItem[]>>({});
 
   useEffect(() => {
@@ -100,22 +101,30 @@ const ContributeWidget: React.FC = () => {
 
   if (!isLibrary) return null;
 
-  const handleSendToBot = (e: React.FormEvent) => {
+  const handleSendToBot = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!activeCourse || !teacher.trim() || !reason.trim()) return;
+    if (!activeCourse || !teacher.trim() || !reason.trim() || submitting) return;
+    setSubmitting(true);
 
-    const rawJson = JSON.stringify({
-      c: activeCourse.id,
-      k: kind,
-      t: teacher.trim(),
-      r: reason.trim(),
-    });
-    const bytes = new TextEncoder().encode(rawJson);
-    let bin = '';
-    bytes.forEach((b) => (bin += String.fromCharCode(b)));
-    const b64url = btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    let startParam = `add_${activeCourse.id}`;
+    try {
+      const res = await fetch(`${BOT_API_BASE}/api/draft`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          c: activeCourse.id,
+          k: kind,
+          t: teacher.trim(),
+          r: reason.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (data?.ok && data?.id) {
+        startParam = `s_${data.id}`;
+      }
+    } catch {}
 
-    const startParam = b64url.length <= 60 ? `c_${b64url}` : `add_${activeCourse.id}`;
+    setSubmitting(false);
     window.open(`https://t.me/TechEliteHUBot?start=${startParam}`, '_blank', 'noopener,noreferrer');
     setOpen(false);
   };
@@ -251,10 +260,11 @@ const ContributeWidget: React.FC = () => {
 
             <button
               type="submit"
+              disabled={submitting}
               className="te-contrib-btn"
-              style={{ width: '100%', padding: '11px', marginTop: 6, textAlign: 'center' }}
+              style={{ width: '100%', padding: '11px', marginTop: 6, textAlign: 'center', opacity: submitting ? 0.7 : 1 }}
             >
-              متابعة ورفع الملفات في بوت الدفعة ✈️
+              {submitting ? 'جاري التجهيز...' : 'متابعة ورفع الملفات في بوت الدفعة ✈️'}
             </button>
           </form>
         </div>
@@ -285,4 +295,3 @@ function mountContributeWidget() {
 }
 
 mountContributeWidget();
-
