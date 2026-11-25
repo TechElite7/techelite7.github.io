@@ -216,17 +216,31 @@ function mountContributeWidget() {
     if (document.getElementById('te-contrib-root')) return;
     const container = document.querySelector('#library, [id*="library"], main');
     if (!container) return;
+
+    const headings = Array.from(container.querySelectorAll('h1, h2, h3'));
+    const libHeading = headings.find((el) => (el.textContent || '').includes('مصادرك التعليمية'));
+    if (!libHeading) return;
+
+    let heroBlock: HTMLElement | null = libHeading.parentElement;
+    while (heroBlock && heroBlock.parentElement && heroBlock.parentElement !== container) {
+      heroBlock = heroBlock.parentElement;
+    }
+
     const host = document.createElement('div');
     host.id = 'te-contrib-root';
-    const firstCardOrGrid = container.querySelector('section, [class*="card"], [class*="grid"]');
-    if (firstCardOrGrid && firstCardOrGrid.parentElement === container) {
-      container.insertBefore(host, firstCardOrGrid);
+    host.style.margin = '18px auto';
+    host.style.maxWidth = '1120px';
+
+    if (heroBlock && heroBlock.parentElement === container) {
+      heroBlock.insertAdjacentElement('afterend', host);
     } else {
-      container.prepend(host);
+      libHeading.parentElement?.insertAdjacentElement('afterend', host);
     }
     createRoot(host).render(<ContributeWidget />);
   };
-  setTimeout(tryMount, 300);
+
+  tryMount();
+  setTimeout(tryMount, 150);
   const obs = new MutationObserver(() => tryMount());
   obs.observe(document.body, { childList: true, subtree: true });
 }
