@@ -86,7 +86,7 @@ function injectCloudMaterialsIntoCourses(
       .filter((item) => !hiddenSet.has(item.url) && !existingUrls.has(item.url))
       .map((item) => ({
         title: item.title,
-        kind: item.kind || 'handout',
+        kind: ({ handout: 'ملزمة نظري', lab: 'ملزمة عملي', summary: 'ملخص', exam: 'نموذج', translated: 'ملزمة مترجمة' }[item.kind] || item.kind || 'ملزمة نظري'),
         url: item.url,
         rawArchiveUrl: item.url,
         note: item.reason || '',
@@ -289,6 +289,7 @@ function mountContributeWidget() {
 }
 
 mountContributeWidget();
+
 
 
 
