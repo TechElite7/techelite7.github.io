@@ -1,4 +1,4 @@
-﻿import MajorChoice from "./MajorChoice";
+import MajorChoice from "./MajorChoice";
 import { PwaInstallModal, usePwaInstallPrompt } from "./PwaInstallPrompt";
 import { itTrackDetails } from "./major-details-data";
 import GraduationProjects from "./GraduationProjects";
@@ -62,7 +62,7 @@ import {
 } from "./data";
 import CourseResourceTabs from "./CourseResourceTabs";
 import LogoPhilosophy from "./LogoPhilosophy";
-import { getAllCourseResources, applyCloudMaterials } from "./telegram-materials";
+import { getAllCourseResources } from "./telegram-materials";
 import { getBotUrl } from "./telegram-links";
 
 type Theme = "dark" | "light";
@@ -97,19 +97,6 @@ const validPages = routes.map((r) => r.id);
 
 function App() {
   const [theme, setTheme] = useState<Theme>(() => {
-  const [, setCloudMaterialsTick] = useState(0);
-  useEffect(() => {
-    fetch("https://tech-elite-telegram-bot.husseinthebetter.workers.dev/api/materials")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (data?.ok && data.materials) {
-          applyCloudMaterials(data.materials, Array.isArray(data.hidden) ? data.hidden : []);
-          setCloudMaterialsTick((t) => t + 1);
-          window.dispatchEvent(new Event("te-materials-updated"));
-        }
-      })
-      .catch(() => {});
-  }, []);
     try {
       return localStorage.getItem("tech-elite-theme") === "light"
         ? "light"
@@ -1680,4 +1667,3 @@ function LegacyCta({
 }
 
 export default App;
-

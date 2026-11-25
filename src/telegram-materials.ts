@@ -1745,4 +1745,3 @@ export function applyCloudMaterials(
     }
   }
 }
-
