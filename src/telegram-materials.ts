@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Tech Elite | روابط الملازم والنماذج التي تحتفظ بها الدفعة في تيليجرام.
  *
  * كل مادة لها id مستقل في src/data.ts. ابحث عن المادة، وخذ قيمة id.
@@ -1719,5 +1719,30 @@ export const telegramMaterials: Record<string, Resource[]> = {
 }
 
 export function getAllCourseResources(course: Course): Resource[] {
-  return [...course.resources, ...(telegramMaterials[course.id] ?? [])]
+  return [...course.resources, ...(telegramMaterials[course.id] ?? [])].filter((r) => !hiddenCloudUrls.has(r.url))
 }
+
+const hiddenCloudUrls = new Set<string>()
+
+export function applyCloudMaterials(
+  materialsMap: Record<string, Array<{ title: string; kind: string; url: string; reason?: string }>>,
+  hiddenUrls: string[] = []
+) {
+  hiddenUrls.forEach((u) => hiddenCloudUrls.add(u))
+  for (const [courseId, items] of Object.entries(materialsMap || {})) {
+    if (!Array.isArray(items)) continue
+    if (!telegramMaterials[courseId]) telegramMaterials[courseId] = []
+    const existing = new Set(telegramMaterials[courseId].map((r) => r.url))
+    for (const item of items) {
+      if (!item?.url || hiddenCloudUrls.has(item.url) || existing.has(item.url)) continue
+      telegramMaterials[courseId].push({
+        title: item.title,
+        kind: ((item.kind === 'نموذج' ? 'اختبار' : item.kind) || 'ملزمة نظري') as Resource['kind'],
+        url: item.url,
+        description: item.reason || '',
+      })
+      existing.add(item.url)
+    }
+  }
+}
+

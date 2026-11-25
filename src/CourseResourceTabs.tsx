@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import {
   BookOpen, BookText, Bot, ClipboardCheck, Code2,
   ExternalLink, FileText, GraduationCap, Languages, Lightbulb, Send,
@@ -41,6 +41,8 @@ function telegramLink(url: string): boolean {
 }
 
 export default function CourseResourceTabs({ course }: { course: Course }) {
+  const [, setCloudTick] = useState(0)
+  useEffect(() => { const h = () => setCloudTick((t) => t + 1); window.addEventListener('te-materials-updated', h); return () => window.removeEventListener('te-materials-updated', h) }, [])
 
 const [selected, setSelected] = useState<TabKey>(
   course.hasTheory === false
@@ -128,3 +130,5 @@ const visibleTabs = tabs.filter(item =>
     <p className="resource-safety-note"><Lightbulb size={16}/> الملازم والنماذج تُربط برسائل الملفات المنشورة بإذن أصحابها. المصادر التعليمية الخارجية مستقلة عن المقررات الرسمية للجامعة.</p>
   </section>
 }
+
+

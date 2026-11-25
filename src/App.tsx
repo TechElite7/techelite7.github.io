@@ -1,4 +1,4 @@
-import MajorChoice from "./MajorChoice";
+﻿import MajorChoice from "./MajorChoice";
 import { PwaInstallModal, usePwaInstallPrompt } from "./PwaInstallPrompt";
 import { itTrackDetails } from "./major-details-data";
 import GraduationProjects from "./GraduationProjects";
@@ -1667,3 +1667,4 @@ function LegacyCta({
 }
 
 export default App;
+

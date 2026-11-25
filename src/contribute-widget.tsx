@@ -2,7 +2,7 @@
 import { createRoot } from 'react-dom/client';
 import { courses as itCourses } from './data';
 import { csPlanCourses } from './cs-plan-data';
-import { getAllCourseResources } from './telegram-materials';
+import { applyCloudMaterials } from './telegram-materials';
 import './contribute-widget.css';
 
 const BOT_API_BASE = 'https://tech-elite-telegram-bot.husseinthebetter.workers.dev';
@@ -14,29 +14,6 @@ interface CourseOption {
   major: 'IT' | 'CS';
   level: number;
   semesterLabel: string;
-}
-
-interface ApprovedItem {
-  title: string;
-  kind: string;
-  url: string;
-  teacher?: string;
-  reason?: string;
-  contributor?: string;
-  approvedAt?: string;
-}
-
-function normalizeKind(k: string): string {
-  const s = String(k || '').trim();
-  const map: Record<string, string> = {
-    handout: 'ملزمة نظري',
-    lecture: 'ملزمة نظري',
-    lab: 'ملزمة عملي',
-    summary: 'ملخص',
-    exam: 'نموذج',
-    translated: 'ملزمة مترجمة',
-  };
-  return map[s] || map[s.toLowerCase()] || s || 'ملزمة نظري';
 }
 
 function buildCourseOptions(): CourseOption[] {
@@ -64,48 +41,6 @@ function buildCourseOptions(): CourseOption[] {
 
 const KINDS = ['ملزمة نظري', 'ملزمة عملي', 'ملخص', 'نموذج', 'ملزمة مترجمة'];
 
-function injectCloudMaterialsIntoCourses(
-  materialsMap: Record<string, ApprovedItem[]>,
-  hiddenUrls: string[]
-) {
-  const hiddenSet = new Set(hiddenUrls || []);
-  const allTargets = [
-    ...(Array.isArray(itCourses) ? itCourses : []),
-    ...(Array.isArray(csPlanCourses) ? csPlanCourses : []),
-  ] as Array<Record<string, unknown>>;
-
-  allTargets.forEach((course) => {
-    const cId = String(course.id || '');
-    if (!cId) return;
-
-    if (Array.isArray(course.resources)) {
-      course.resources = (course.resources as Array<Record<string, unknown>>).filter(
-        (r) => !hiddenSet.has(String(r.url || ''))
-      );
-    }
-
-    const extra = Array.isArray(materialsMap[cId]) ? materialsMap[cId] : [];
-    if (!extra.length) return;
-
-    const existingList = Array.isArray(course.resources)
-      ? (course.resources as Array<Record<string, unknown>>)
-      : getAllCourseResources(course as never).map((r) => ({ ...r }));
-
-    const existingUrls = new Set(existingList.map((r) => String(r.url || '')));
-    const additions = extra
-      .filter((item) => !hiddenSet.has(item.url) && !existingUrls.has(item.url))
-      .map((item) => ({
-        title: item.title,
-        kind: normalizeKind(item.kind),
-        url: item.url,
-        note: item.reason || '',
-      }));
-
-    if (additions.length) {
-      course.resources = [...existingList, ...additions];
-    }
-  });
-}
 
 const ContributeWidget: React.FC = () => {
   const allCourses = useMemo(() => buildCourseOptions(), []);
@@ -130,7 +65,7 @@ const ContributeWidget: React.FC = () => {
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (data?.ok && data.materials && typeof data.materials === 'object') {
-          injectCloudMaterialsIntoCourses(data.materials, Array.isArray(data.hidden) ? data.hidden : []);
+          applyCloudMaterials(data.materials, Array.isArray(data.hidden) ? data.hidden : []);
           window.dispatchEvent(new Event('te-materials-updated'));
         }
       })
@@ -297,3 +232,6 @@ function mountContributeWidget() {
 }
 
 mountContributeWidget();
+
+
+
