@@ -62,7 +62,7 @@ import {
 } from "./data";
 import CourseResourceTabs from "./CourseResourceTabs";
 import LogoPhilosophy from "./LogoPhilosophy";
-import { getAllCourseResources } from "./telegram-materials";
+import { getAllCourseResources, applyCloudMaterials } from "./telegram-materials";
 import { getBotUrl } from "./telegram-links";
 
 type Theme = "dark" | "light";
@@ -97,6 +97,19 @@ const validPages = routes.map((r) => r.id);
 
 function App() {
   const [theme, setTheme] = useState<Theme>(() => {
+  const [, setCloudMaterialsTick] = useState(0);
+  useEffect(() => {
+    fetch("https://tech-elite-telegram-bot.husseinthebetter.workers.dev/api/materials")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.ok && data.materials) {
+          applyCloudMaterials(data.materials, Array.isArray(data.hidden) ? data.hidden : []);
+          setCloudMaterialsTick((t) => t + 1);
+          window.dispatchEvent(new Event("te-materials-updated"));
+        }
+      })
+      .catch(() => {});
+  }, []);
     try {
       return localStorage.getItem("tech-elite-theme") === "light"
         ? "light"
