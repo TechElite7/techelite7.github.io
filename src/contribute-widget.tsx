@@ -2,9 +2,11 @@
 import { createRoot } from 'react-dom/client';
 import { courses as itCourses } from './data';
 import { csPlanCourses } from './cs-plan-data';
+import { getAllCourseResources } from './telegram-materials';
 import './contribute-widget.css';
 
 const BOT_API_BASE = 'https://tech-elite-telegram-bot.husseinthebetter.workers.dev';
+const BOT_USERNAME = 'TechEliteHUBot';
 
 interface CourseOption {
   id: string;
@@ -49,6 +51,61 @@ function buildCourseOptions(): CourseOption[] {
 
 const KINDS = ['ملزمة نظري', 'ملزمة عملي', 'ملخص', 'نموذج', 'ملزمة مترجمة'];
 
+// تحويل رابط أرشيف تيليجرام إلى رابط فتح مباشر عبر البوت حتى يعمل في الموقع بدون رسالة "البوت غير مربوط"
+function toBotMaterialLink(courseId: string, url: string): string {
+  const m = /\/(\d+)$/.exec(String(url || ''));
+  if (m && courseId) {
+    return `https://t.me/${BOT_USERNAME}?start=m_${courseId}_${m[1]}`;
+  }
+  return url;
+}
+
+// حقن الملازم السحابية تلقائياً داخل بيانات المقررات في الذاكرة ليراها الموقع وكأنها جزء أصيل من الكود
+function injectCloudMaterialsIntoCourses(
+  materialsMap: Record<string, ApprovedItem[]>,
+  hiddenUrls: string[]
+) {
+  const hiddenSet = new Set(hiddenUrls || []);
+  const allTargets = [
+    ...(Array.isArray(itCourses) ? itCourses : []),
+    ...(Array.isArray(csPlanCourses) ? csPlanCourses : []),
+  ] as Array<Record<string, unknown>>;
+
+  allTargets.forEach((course) => {
+    const cId = String(course.id || '');
+    if (!cId) return;
+
+    // تصفية المخفي من المصادر الأساسية
+    if (Array.isArray(course.resources)) {
+      course.resources = (course.resources as Array<Record<string, unknown>>).filter(
+        (r) => !hiddenSet.has(String(r.url || ''))
+      );
+    }
+
+    const extra = Array.isArray(materialsMap[cId]) ? materialsMap[cId] : [];
+    if (!extra.length) return;
+
+    const existingList = Array.isArray(course.resources)
+      ? (course.resources as Array<Record<string, unknown>>)
+      : getAllCourseResources(course as never).map((r) => ({ ...r }));
+
+    const existingUrls = new Set(existingList.map((r) => String(r.url || '')));
+    const additions = extra
+      .filter((item) => !hiddenSet.has(item.url) && !existingUrls.has(item.url))
+      .map((item) => ({
+        title: item.title,
+        kind: item.kind || 'handout',
+        url: toBotMaterialLink(cId, item.url),
+        rawArchiveUrl: item.url,
+        note: item.reason || '',
+      }));
+
+    if (additions.length) {
+      course.resources = [...existingList, ...additions];
+    }
+  });
+}
+
 const ContributeWidget: React.FC = () => {
   const allCourses = useMemo(() => buildCourseOptions(), []);
   const [isLibrary, setIsLibrary] = useState(() => window.location.hash.includes('library'));
@@ -60,7 +117,6 @@ const ContributeWidget: React.FC = () => {
   const [teacher, setTeacher] = useState('');
   const [reason, setReason] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [approvedMap, setApprovedMap] = useState<Record<string, ApprovedItem[]>>({});
 
   useEffect(() => {
     const onHash = () => setIsLibrary(window.location.hash.includes('library'));
@@ -69,18 +125,16 @@ const ContributeWidget: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    let active = true;
     fetch(`${BOT_API_BASE}/api/materials`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (active && data?.ok && data.materials && typeof data.materials === 'object') {
-          setApprovedMap(data.materials);
+        if (data?.ok && data.materials && typeof data.materials === 'object') {
+          injectCloudMaterialsIntoCourses(data.materials, Array.isArray(data.hidden) ? data.hidden : []);
+          // إشعار واجهة الموقع بإعادة الرسم بهدوء إن كانت مستمعة
+          window.dispatchEvent(new Event('te-materials-updated'));
         }
       })
       .catch(() => {});
-    return () => {
-      active = false;
-    };
   }, []);
 
   const filtered = useMemo(() => {
@@ -88,16 +142,6 @@ const ContributeWidget: React.FC = () => {
   }, [allCourses, major, level]);
 
   const activeCourse = filtered.find((c) => c.id === courseId) || filtered[0];
-
-  const recentApproved = useMemo(() => {
-    const entries: Array<{ courseName: string; courseId: string; item: ApprovedItem }> = [];
-    Object.entries(approvedMap).forEach(([cId, items]) => {
-      if (!Array.isArray(items)) return;
-      const cName = allCourses.find((c) => c.id === cId)?.name || cId;
-      items.forEach((item) => entries.push({ courseName: cName, courseId: cId, item }));
-    });
-    return entries.reverse();
-  }, [approvedMap, allCourses]);
 
   if (!isLibrary) return null;
 
@@ -125,13 +169,13 @@ const ContributeWidget: React.FC = () => {
     } catch {}
 
     setSubmitting(false);
-    window.open(`https://t.me/TechEliteHUBot?start=${startParam}`, '_blank', 'noopener,noreferrer');
+    window.open(`https://t.me/${BOT_USERNAME}?start=${startParam}`, '_blank', 'noopener,noreferrer');
     setOpen(false);
   };
 
   return (
     <>
-      <div className="te-contrib-banner" style={{ maxWidth: 1120, margin: '16px auto 14px' }}>
+      <div className="te-contrib-banner" style={{ maxWidth: 1120, margin: '16px auto 18px' }}>
         <div className="te-contrib-info">
           <h4>🌱 ساهم في استمرار هذا المرجع للأجيال القادمة</h4>
           <p>لديك ملزمة محدثة، ملخص، أو نموذج اختبار جديد؟ أرسله ليُراجع ويُضاف باسمك للدفعات القادمة.</p>
@@ -140,48 +184,6 @@ const ContributeWidget: React.FC = () => {
           📤 ساهم تحديث الملازم
         </button>
       </div>
-
-      {recentApproved.length > 0 && (
-        <div
-          style={{
-            maxWidth: 1120,
-            margin: '0 auto 20px',
-            padding: '14px 18px',
-            borderRadius: 14,
-            border: '1px solid rgba(139, 92, 246, 0.25)',
-            background: 'rgba(139, 92, 246, 0.05)',
-          }}
-        >
-          <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: 10 }}>
-            ✨ أحدث الملازم والنماذج المعتمدة من مساهمات الطلاب ({recentApproved.length})
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
-            {recentApproved.map(({ courseName, item }, idx) => (
-              <a
-                key={`${item.url}-${idx}`}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'block',
-                  padding: '10px 12px',
-                  borderRadius: 10,
-                  border: '1px solid rgba(139, 92, 246, 0.2)',
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  background: 'rgba(255,255,255,0.03)',
-                }}
-              >
-                <div style={{ fontWeight: 700, fontSize: '0.88rem' }}>{courseName}</div>
-                <div style={{ fontSize: '0.82rem', opacity: 0.9, marginTop: 3 }}>{item.title}</div>
-                {item.reason && (
-                  <div style={{ fontSize: '0.76rem', opacity: 0.72, marginTop: 3 }}>📝 {item.reason}</div>
-                )}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
 
       {open && (
         <div className="te-contrib-overlay" onClick={() => setOpen(false)}>
